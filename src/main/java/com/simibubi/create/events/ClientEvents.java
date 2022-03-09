@@ -55,17 +55,17 @@ import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 import com.simibubi.create.foundation.utility.placement.PlacementHelpers;
 import com.simibubi.create.foundation.utility.worldWrappers.WrappedClientWorld;
-import io.github.fabricators_of_create.porting_lib.event.AttackAirCallback;
-import io.github.fabricators_of_create.porting_lib.event.ClientWorldEvents;
-import io.github.fabricators_of_create.porting_lib.event.FogEvents;
-import io.github.fabricators_of_create.porting_lib.event.FogEvents.ColorData;
-import io.github.fabricators_of_create.porting_lib.event.OnStartUseItemCallback;
-import io.github.fabricators_of_create.porting_lib.event.OverlayRenderCallback;
-import io.github.fabricators_of_create.porting_lib.event.ParticleManagerRegistrationCallback;
-import io.github.fabricators_of_create.porting_lib.event.PlayerTickEndCallback;
-import io.github.fabricators_of_create.porting_lib.event.RenderHandCallback;
-import io.github.fabricators_of_create.porting_lib.event.RenderTickStartCallback;
-import io.github.fabricators_of_create.porting_lib.event.RenderTooltipBorderColorCallback;
+import com.simibubi.create.lib.event.AttackAirCallback;
+import com.simibubi.create.lib.event.ClientWorldEvents;
+import com.simibubi.create.lib.event.FogEvents;
+import com.simibubi.create.lib.event.FogEvents.ColorData;
+import com.simibubi.create.lib.event.OnStartUseItemCallback;
+import com.simibubi.create.lib.event.OverlayRenderCallback;
+import com.simibubi.create.lib.event.ParticleManagerRegistrationCallback;
+import com.simibubi.create.lib.event.PlayerTickEndCallback;
+import com.simibubi.create.lib.event.RenderHandCallback;
+import com.simibubi.create.lib.event.RenderTickStartCallback;
+import com.simibubi.create.lib.event.RenderTooltipBorderColorCallback;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
@@ -81,6 +81,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
@@ -112,7 +113,9 @@ public class ClientEvents {
 			return;
 
 		Level world = Minecraft.getInstance().level;
-
+		if (world == null || Minecraft.getInstance().getOverlay() instanceof LoadingOverlay){
+			return;
+		}
 		SoundScapes.tick();
 		AnimationTickHolder.tick();
 		ScrollValueHandler.tick();

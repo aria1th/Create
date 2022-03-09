@@ -33,8 +33,22 @@ repositories {
     maven { url = "https://maven.devos.community/snapshots/" }
     maven { url = "https://maven.terraformersmc.com/" }
     maven { url = "https://maven.cafeteria.dev" }
-    maven { url = "https://jitpack.io/" }
-    maven { url = "https://maven.jamieswhiteshirt.com/libs-release" }
+//    maven { url 'https://maven.blamejared.com' }
+    maven {
+        url = "https://jitpack.io/"
+        content {
+            includeGroup("com.github.PepperCode1")
+            includeGroup("com.github.SuperCoder7979")
+            includeGroup("com.github.Jozufozu")
+            includeGroup("com.github.emilyploszaj")
+        }
+    }
+    maven {
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
 }
 
 dependencies {
@@ -63,7 +77,6 @@ dependencies {
 
 //    modImplementation("vazkii.botania:Botania:1.18.1-428-FABRIC-SNAPSHOT")
 
-    modImplementation(include("io.github.fabricators_of_create:Porting-Lib:0.1.0+1.18.${project.port_lib_hash}"))
     modImplementation(include("me.alphamode:ForgeTags:${project.forge_tags_version}"))
     modImplementation(include("curse.maven:forge-config-api-port-fabric-547434:${project.config_api_version}"))
     implementation(include('com.electronwill.night-config:core:3.6.0'))
@@ -126,7 +139,7 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = 'UTF-8'
 
-    it.options.release = 17
+    it.options.release = 16
 }
 
 java {
@@ -139,21 +152,4 @@ jar {
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
 
-    repositories {
-        maven {
-            url = "https://maven.devos.community/${System.getenv().PUBLISH_SUFFIX}/"
-            credentials {
-                username = System.getenv().MAVEN_USER
-                password = System.getenv().MAVEN_PASS
-            }
-            authentication { basic(BasicAuthentication) }
-        }
-    }
-}

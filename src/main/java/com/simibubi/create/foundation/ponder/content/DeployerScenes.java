@@ -14,7 +14,7 @@ import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.WorldSectionElement;
 import com.simibubi.create.foundation.ponder.instruction.EmitParticlesInstruction.Emitter;
 import com.simibubi.create.foundation.utility.Pointing;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import com.simibubi.create.lib.util.NBTSerializer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

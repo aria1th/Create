@@ -6,8 +6,6 @@ import static com.simibubi.create.foundation.tileEntity.behaviour.belt.BeltProce
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.api.behaviour.BlockSpoutingBehaviour;
@@ -24,12 +22,12 @@ import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemS
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour.TransportedResult;
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
-import io.github.fabricators_of_create.porting_lib.extensions.BlockEntityExtensions;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
+import com.simibubi.create.lib.block.CustomRenderBoundingBoxBlockEntity;
+import com.simibubi.create.lib.extensions.BlockEntityExtensions;
+import com.simibubi.create.lib.transfer.TransferUtil;
+import com.simibubi.create.lib.transfer.fluid.FluidStack;
+import com.simibubi.create.lib.transfer.fluid.FluidTransferable;
+import com.simibubi.create.lib.transfer.fluid.IFluidHandler;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.core.BlockPos;
@@ -163,9 +161,9 @@ public class SpoutTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 	@Nullable
 	@Override
-	public LazyOptional<IFluidHandler> getFluidHandler(@Nullable Direction direction) {
+	public IFluidHandler getFluidHandler(@Nullable Direction direction) {
 		if (direction != Direction.DOWN) {
-			return tank.getCapability().cast();
+			return tank.getCapability().orElse(null);
 		}
 		return null;
 	}

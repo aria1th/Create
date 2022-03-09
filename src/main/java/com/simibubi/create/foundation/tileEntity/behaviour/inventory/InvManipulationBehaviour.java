@@ -8,8 +8,8 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBehaviour;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import com.simibubi.create.lib.transfer.item.IItemHandler;
+import com.simibubi.create.lib.transfer.item.ItemHandlerHelper;
 
 import net.minecraft.world.item.ItemStack;
 
@@ -68,10 +68,9 @@ public class InvManipulationBehaviour extends CapManipulationBehaviourBase<IItem
 			return ItemStack.EMPTY;
 
 		Predicate<ItemStack> test = getFilterTest(filter);
-
-		ItemStack simulatedItems = extractAmountOrThresh(inventory, test, amount, amountThreshold, true);
-		if (shouldSimulate || simulatedItems.isEmpty())
-			return simulatedItems;
+		if(shouldSimulate){
+			return extractAmountOrThresh(inventory, test, amount, amountThreshold, true);
+		}
 
 		return extractAmountOrThresh(inventory, test, amount, amountThreshold, false);
 	}

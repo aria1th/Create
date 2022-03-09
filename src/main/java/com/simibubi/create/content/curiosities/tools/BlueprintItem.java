@@ -6,11 +6,11 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.logistics.item.filter.AttributeFilterContainer.WhitelistMode;
 import com.simibubi.create.content.logistics.item.filter.FilterItem;
 import com.simibubi.create.content.logistics.item.filter.ItemAttribute;
-import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.IngredientAccessor;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.MultiItemValue;
+import com.simibubi.create.lib.mixin.common.accessor.IngredientAccessor;
+import com.simibubi.create.lib.transfer.item.ItemStackHandler;
+import com.simibubi.create.lib.util.MultiItemValue;
 
-import io.github.fabricators_of_create.porting_lib.util.ShapedRecipeUtil;
+import com.simibubi.create.lib.util.ShapedRecipeUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -95,7 +95,7 @@ public class BlueprintItem extends Item {
 
 	private static ItemStack convertIngredientToFilter(Ingredient ingredient) {
 		Ingredient.Value[] acceptedItems =
-				((IngredientAccessor) ingredient).port_lib$getValues(); // values
+				((IngredientAccessor) ingredient).create$getAcceptedItems(); // values
 		if (acceptedItems == null || acceptedItems.length > 18)
 			return ItemStack.EMPTY;
 		if (acceptedItems.length == 0)
