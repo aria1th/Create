@@ -3,8 +3,7 @@ package com.simibubi.create.content.contraptions.components.actors.dispenser;
 import javax.annotation.Nullable;
 
 import com.simibubi.create.content.contraptions.components.structureMovement.MovementContext;
-
-import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.AbstractProjectileDispenseBehaviorAccessor;
+import com.simibubi.create.lib.mixin.common.accessor.AbstractProjectileDispenseBehaviorAccessor;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
@@ -52,7 +51,7 @@ public abstract class MovedProjectileDispenserBehaviour extends MovedDefaultDisp
 			@Override
 			protected Projectile getProjectileEntity(Level world, double x, double y, double z, ItemStack itemStack) {
 				try {
-					return ((AbstractProjectileDispenseBehaviorAccessor) vanillaBehaviour).port_lib$getProjectile(world, new SimplePos(x, y, z) , itemStack);
+					return ((AbstractProjectileDispenseBehaviorAccessor) vanillaBehaviour).create$getProjectile(world, new SimplePos(x, y, z) , itemStack);
 				} catch (Throwable ignored) {
 				}
 				return null;
@@ -61,7 +60,7 @@ public abstract class MovedProjectileDispenserBehaviour extends MovedDefaultDisp
 			@Override
 			protected float getProjectileInaccuracy() {
 				try {
-					return ((AbstractProjectileDispenseBehaviorAccessor) vanillaBehaviour).port_lib$getUncertainty();
+					return ((AbstractProjectileDispenseBehaviorAccessor) vanillaBehaviour).create$getUncertainty();
 				} catch (Throwable ignored) {
 				}
 				return super.getProjectileInaccuracy();
@@ -70,7 +69,7 @@ public abstract class MovedProjectileDispenserBehaviour extends MovedDefaultDisp
 			@Override
 			protected float getProjectileVelocity() {
 				try {
-					return ((AbstractProjectileDispenseBehaviorAccessor) vanillaBehaviour).port_lib$getPower();
+					return ((AbstractProjectileDispenseBehaviorAccessor) vanillaBehaviour).create$getPower();
 				} catch (Throwable ignored) {
 				}
 				return super.getProjectileVelocity();

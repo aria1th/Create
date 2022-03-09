@@ -11,8 +11,8 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.utility.Pair;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import com.simibubi.create.lib.transfer.item.IItemHandler;
+import com.simibubi.create.lib.transfer.item.ItemHandlerHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -155,9 +155,12 @@ public class ItemHelper {
 			extracting = ItemStack.EMPTY;
 
 			for (int slot = 0; slot < inv.getSlots(); slot++) {
+				ItemStack slotStack = inv.getStackInSlot(slot);
 				int amountToExtractFromThisSlot =
-					Math.min(maxExtractionCount - extracting.getCount(), inv.getStackInSlot(slot)
+					Math.min(maxExtractionCount - extracting.getCount(), slotStack
 						.getMaxStackSize());
+				if (slotStack.isEmpty() || !test.test(slotStack) || !canItemStackAmountsStack(slotStack,extracting))
+					continue;
 				ItemStack stack = inv.extractItem(slot, amountToExtractFromThisSlot, true);
 
 				if (stack.isEmpty())
@@ -216,6 +219,8 @@ public class ItemHelper {
 			if (extracting.isEmpty()) {
 				ItemStack stackInSlot = inv.getStackInSlot(slot);
 				if (stackInSlot.isEmpty())
+					continue;
+				if(!test.test(stackInSlot) || !canItemStackAmountsStack(stackInSlot, extracting))
 					continue;
 				int maxExtractionCountForItem = amountFunction.apply(stackInSlot);
 				if (maxExtractionCountForItem == 0)

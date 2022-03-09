@@ -19,8 +19,8 @@ import com.simibubi.create.content.contraptions.components.structureMovement.mou
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandlerModifiable;
-import io.github.fabricators_of_create.porting_lib.transfer.item.InvWrapper;
+import com.simibubi.create.lib.transfer.item.IItemHandlerModifiable;
+import com.simibubi.create.lib.transfer.item.InvWrapper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -73,7 +73,22 @@ public class MountedContraption extends Contraption {
 
 		return true;
 	}
+	public boolean assembleLimited(Level world, BlockPos pos, int limit) throws AssemblyException {
+		BlockState state = world.getBlockState(pos);
+		if (!state.hasProperty(RAIL_SHAPE))
+			return false;
+		if (!searchMovedStructureLimited(world, pos, null, limit))
+			return false;
 
+		Axis axis = state.getValue(RAIL_SHAPE) == RailShape.EAST_WEST ? Axis.X : Axis.Z;
+		addBlock(pos, Pair.of(new StructureBlockInfo(pos, AllBlocks.MINECART_ANCHOR.getDefaultState()
+				.setValue(BlockStateProperties.HORIZONTAL_AXIS, axis), null), null));
+
+		if (blocks.size() == 1)
+			return false;
+
+		return true;
+	}
 	@Override
 	protected boolean addToInitialFrontier(Level world, BlockPos pos, Direction direction, Queue<BlockPos> frontier) {
 		frontier.clear();

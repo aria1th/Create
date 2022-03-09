@@ -66,14 +66,14 @@ import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.NBTProcessors;
 import com.simibubi.create.foundation.utility.UniqueLinkedList;
-import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.HashMapPaletteAccessor;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.CombinedInvWrapper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandlerModifiable;
-import io.github.fabricators_of_create.porting_lib.util.LevelUtil;
-import io.github.fabricators_of_create.porting_lib.util.StickinessUtil;
+import com.simibubi.create.lib.mixin.common.accessor.HashMapPaletteAccessor;
+import com.simibubi.create.lib.transfer.fluid.FluidStack;
+import com.simibubi.create.lib.transfer.fluid.FluidTank;
+import com.simibubi.create.lib.transfer.fluid.IFluidHandler;
+import com.simibubi.create.lib.transfer.item.CombinedInvWrapper;
+import com.simibubi.create.lib.transfer.item.IItemHandlerModifiable;
+import com.simibubi.create.lib.util.LevelUtil;
+import com.simibubi.create.lib.util.StickinessUtil;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -175,6 +175,7 @@ public abstract class Contraption {
 	}
 
 	public abstract boolean assemble(Level world, BlockPos pos) throws AssemblyException;
+	//public abstract boolean assembleLimited(Level world, BlockPos pos, int limit) throws AssemblyException;
 
 	public abstract boolean canBeStabilized(Direction facing, BlockPos localPos);
 
@@ -216,7 +217,7 @@ public abstract class Contraption {
 			frontier.add(pos);
 		if (!addToInitialFrontier(world, pos, forcedDirection, frontier))
 			return false;
-		for (int limit = 100000; limit > 0; limit--) {
+		for (int limit = 1024; limit > 0; limit--) {
 			if (frontier.isEmpty())
 				return true;
 			if (!moveBlock(world, forcedDirection, frontier, visited))
@@ -224,7 +225,28 @@ public abstract class Contraption {
 		}
 		throw AssemblyException.structureTooLarge();
 	}
+	public boolean searchMovedStructureLimited(Level world, BlockPos pos, @Nullable Direction forcedDirection, int limited)
+			throws AssemblyException {
+		initialPassengers.clear();
+		Queue<BlockPos> frontier = new UniqueLinkedList<>();
+		Set<BlockPos> visited = new HashSet<>();
+		anchor = pos;
 
+		if (bounds == null)
+			bounds = new AABB(BlockPos.ZERO);
+
+		if (!BlockMovementChecks.isBrittle(world.getBlockState(pos)))
+			frontier.add(pos);
+		if (!addToInitialFrontier(world, pos, forcedDirection, frontier))
+			return false;
+		for (int limit = limited; limit > 0; limit--) {
+			if (frontier.isEmpty())
+				return true;
+			if (!moveBlock(world, forcedDirection, frontier, visited))
+				return false;
+		}
+		throw AssemblyException.structureTooLarge();
+	}
 	public void onEntityCreated(AbstractContraptionEntity entity) {
 		this.entity = entity;
 
@@ -874,7 +896,7 @@ public abstract class Contraption {
 
 		ListTag paletteNBT = new ListTag();
 		for(int i = 0; i < palette.getSize(); ++i)
-			paletteNBT.add(NbtUtils.writeBlockState(((HashMapPaletteAccessor<BlockState>)palette).port_lib$getValues().byId(i)));
+			paletteNBT.add(NbtUtils.writeBlockState(((HashMapPaletteAccessor<BlockState>)palette).create$getValues().byId(i)));
 		compound.put("Palette", paletteNBT);
 		compound.put("BlockList", blockList);
 
@@ -891,9 +913,9 @@ public abstract class Contraption {
 			});
 
 			ListTag list = c.getList("Palette", 10);
-			((HashMapPaletteAccessor)palette).port_lib$getValues().clear();
+			((HashMapPaletteAccessor)palette).create$getValues().clear();
 			for (int i = 0; i < list.size(); ++i)
-				((HashMapPaletteAccessor)palette).port_lib$getValues().add(NbtUtils.readBlockState(list.getCompound(i)));
+				((HashMapPaletteAccessor)palette).create$getValues().add(NbtUtils.readBlockState(list.getCompound(i)));
 
 			blockList = c.getList("BlockList", 10);
 		} else {

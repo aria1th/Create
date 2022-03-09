@@ -7,13 +7,13 @@
   ],
   "key": {
     "C": {
-      "item": "create:andesite_casing"
+      "item": "create:brass_casing"
     },
     "A": {
-      "item": "create:andesite_alloy"
+      "item": "create:brass_ingot"
     },
     "I": {
-      "tag": "c:ingots/iron"
+      "tag": "c:iron_blocks"
     }
   },
   "result": {

@@ -12,7 +12,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
-import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.StairBlockAccessor;
+import com.simibubi.create.lib.mixin.common.accessor.StairBlockAccessor;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.providers.DataGenContext;
@@ -320,7 +320,7 @@ public class CopperBlockSet {
 			Supplier<BlockState> defaultStateSupplier = () -> blocks.get(parent, state, waxed)
 				.getDefaultState();
 			if (waxed) {
-				return p -> StairBlockAccessor.port_lib$init(defaultStateSupplier.get(), p);
+				return p -> StairBlockAccessor.create$init(defaultStateSupplier.get(), p);
 			} else {
 				return p -> {
 					WeatheringCopperStairBlock block =

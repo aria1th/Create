@@ -56,7 +56,6 @@ public class ContraptionRenderDispatcher {
 
 	public static void tick(Level world) {
 		if (Minecraft.getInstance().isPaused()) return;
-
 		WORLDS.get(world).tick();
 	}
 
@@ -80,9 +79,15 @@ public class ContraptionRenderDispatcher {
 
 	public static void renderFromEntity(AbstractContraptionEntity entity, Contraption contraption, MultiBufferSource buffers) {
 		Level world = entity.level;
-
-		ContraptionRenderInfo renderInfo = WORLDS.get(world)
+		ContraptionRenderInfo renderInfo;
+		try {
+			 renderInfo = WORLDS.get(world)
 				.getRenderInfo(contraption);
+		}
+		catch (RuntimeException ignored){
+			return;
+		}
+
 		ContraptionMatrices matrices = renderInfo.getMatrices();
 
 		// something went wrong with the other rendering

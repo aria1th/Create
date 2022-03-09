@@ -1,6 +1,6 @@
 package com.simibubi.create.foundation.tileEntity;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
+import com.simibubi.create.lib.block.CustomRenderBoundingBoxBlockEntity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

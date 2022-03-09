@@ -10,10 +10,10 @@ import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import com.simibubi.create.lib.transfer.fluid.FluidStack;
+import com.simibubi.create.lib.transfer.fluid.FluidTransferable;
+import com.simibubi.create.lib.transfer.fluid.IFluidHandler;
+import com.simibubi.create.lib.util.LazyOptional;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.core.BlockPos;
@@ -183,9 +183,9 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 
 	@Nullable
 	@Override
-	public LazyOptional<IFluidHandler> getFluidHandler(@Nullable Direction direction) {
+	public IFluidHandler getFluidHandler(@Nullable Direction direction) {
 		if (direction == null || HosePulleyBlock.hasPipeTowards(level, worldPosition, getBlockState(), direction)) {
-			return capability.cast();
+			return capability.orElse(null);
 		}
 		return null;
 	}

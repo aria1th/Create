@@ -9,11 +9,8 @@ import net.minecraft.world.level.material.PushReaction;
 
 @MethodsReturnNonnullByDefault
 public class SharedProperties {
-	public static final Material BELT_MATERIAL =
+	public static Material beltMaterial =
 		new Material(MaterialColor.COLOR_GRAY, false, true, true, true, false, false, PushReaction.NORMAL);
-
-	public static final Material CRUSHING_WHEEL_CONTROLLER_MATERIAL =
-		new Material(MaterialColor.NONE, false, false, true, true, false, false, PushReaction.BLOCK);
 
 	public static Block stone() {
 		return Blocks.ANDESITE;
