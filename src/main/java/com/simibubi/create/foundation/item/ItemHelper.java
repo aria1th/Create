@@ -159,7 +159,7 @@ public class ItemHelper {
 				int amountToExtractFromThisSlot =
 					Math.min(maxExtractionCount - extracting.getCount(), slotStack
 						.getMaxStackSize());
-				if (slotStack.isEmpty() || !test.test(slotStack) || !canItemStackAmountsStack(slotStack,extracting))
+				if (slotStack.isEmpty() || !test.test(slotStack))
 					continue;
 				ItemStack stack = inv.extractItem(slot, amountToExtractFromThisSlot, true);
 
@@ -220,7 +220,7 @@ public class ItemHelper {
 				ItemStack stackInSlot = inv.getStackInSlot(slot);
 				if (stackInSlot.isEmpty())
 					continue;
-				if(!test.test(stackInSlot) || !canItemStackAmountsStack(stackInSlot, extracting))
+				if(!test.test(stackInSlot))
 					continue;
 				int maxExtractionCountForItem = amountFunction.apply(stackInSlot);
 				if (maxExtractionCountForItem == 0)

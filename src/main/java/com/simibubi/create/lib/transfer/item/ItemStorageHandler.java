@@ -1,12 +1,17 @@
 package com.simibubi.create.lib.transfer.item;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.impl.transfer.item.InventoryStorageImpl;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 
 // this class is awful, but we don't have many options
 
@@ -17,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 public class ItemStorageHandler implements IItemHandlerModifiable {
 	protected final Storage<ItemVariant> storage;
 	private long version;
-	private Int2ObjectOpenHashMap<ItemStack> cachedStack = new Int2ObjectOpenHashMap<>();
+	private final Int2ObjectOpenHashMap<ItemStack> cachedStack = new Int2ObjectOpenHashMap<>();
 	public ItemStorageHandler(Storage<ItemVariant> storage) {
 		this.storage = storage;
 		this.version = storage.getVersion();
@@ -26,7 +31,7 @@ public class ItemStorageHandler implements IItemHandlerModifiable {
 	private int slotCount = 0;
 	@Override
 	public int getSlots() {
-		if(this.slotCount>0) return slotCount;
+		if (this.slotCount>0) return slotCount;
 		//Do we have chance to change Slot count in storage? I doubt it.
 		int slots = 0;
 		try (Transaction t = Transaction.openOuter()) {
@@ -105,9 +110,6 @@ public class ItemStorageHandler implements IItemHandlerModifiable {
 			}
 			if (!sim) {
 				t.commit();
-			}
-			else {
-				t.abort();
 			}
 		}
 		return finalVal;

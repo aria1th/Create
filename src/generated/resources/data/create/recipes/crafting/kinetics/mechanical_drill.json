@@ -10,7 +10,7 @@
       "item": "create:brass_casing"
     },
     "A": {
-      "item": "create:brass_ingot"
+      "item": "indrev:diamond_drill_head"
     },
     "I": {
       "tag": "c:iron_blocks"
