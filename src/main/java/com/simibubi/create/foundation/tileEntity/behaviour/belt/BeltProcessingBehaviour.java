@@ -7,7 +7,9 @@ import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.BehaviourType;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -46,8 +48,7 @@ public class BeltProcessingBehaviour extends TileEntityBehaviour {
 		BlockState blockState = world.getBlockState(processingSpace.above());
 		if (AbstractFunnelBlock.isFunnel(blockState))
 			return false;
-		return !blockState.getCollisionShape(world, processingSpace.above())
-			.isEmpty();
+		return Block.isFaceFull(blockState.getCollisionShape(world, processingSpace.above()).getFaceShape(Direction.DOWN), Direction.DOWN);
 	}
 
 	@Override
