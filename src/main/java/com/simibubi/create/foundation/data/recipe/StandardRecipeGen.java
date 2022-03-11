@@ -767,6 +767,17 @@ public class StandardRecipeGen extends CreateRecipeProvider {
 				.pattern("AIA")
 				.pattern(" C ")),
 
+		BRASS_MECHANICAL_HARVESTER = create(AllBlocks.BRASS_MECHANICAL_HARVESTER).unlockedBy(I::brassCasing)
+			.viaShaped(b -> b.define('C', I.brassCasing())
+				.define('B', I.brassSheet())
+				.define('I', I.ironSheet())
+				.define('E', I.electronTube())
+				.define('H', AllItems.BRASS_HAND.get())
+				.pattern("BIB")
+				.pattern("BIB")
+				.pattern("ECH")
+			),
+
 		MECHANICAL_PLOUGH = create(AllBlocks.MECHANICAL_PLOUGH).unlockedBy(I::andesiteCasing)
 			.viaShaped(b -> b.define('C', I.andesiteCasing())
 				.define('A', I.andesite())

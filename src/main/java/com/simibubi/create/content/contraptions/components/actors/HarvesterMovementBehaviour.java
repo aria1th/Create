@@ -172,7 +172,7 @@ public class HarvesterMovementBehaviour extends MovementBehaviour {
 		return false;
 	}
 
-	private BlockState cutCrop(Level world, BlockPos pos, BlockState state) {
+	protected BlockState cutCrop(Level world, BlockPos pos, BlockState state) {
 		if (!AllConfigs.SERVER.kinetics.harvesterReplants.get()) {
 			if (state.getFluidState()
 				.isEmpty())
