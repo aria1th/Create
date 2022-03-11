@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BIB",
+    "BIB",
+    "ECH"
+  ],
+  "key": {
+    "C": {
+      "item": "create:brass_casing"
+    },
+    "B": {
+      "tag": "c:plates/brass"
+    },
+    "I": {
+      "tag": "c:plates/iron"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "H": {
+      "item": "create:brass_hand"
+    }
+  },
+  "result": {
+    "item": "create:brass_mechanical_harvester"
+  }
+}

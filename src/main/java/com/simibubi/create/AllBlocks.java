@@ -16,6 +16,7 @@ import com.simibubi.create.content.AllSections;
 import com.simibubi.create.content.contraptions.base.CasingBlock;
 import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.contraptions.components.actors.BellMovementBehaviour;
+import com.simibubi.create.content.contraptions.components.actors.BrassHarvesterMovementBehaviour;
 import com.simibubi.create.content.contraptions.components.actors.DrillBlock;
 import com.simibubi.create.content.contraptions.components.actors.DrillMovementBehaviour;
 import com.simibubi.create.content.contraptions.components.actors.HarvesterBlock;
@@ -238,7 +239,7 @@ public class AllBlocks {
 					.when(survivesExplosion)
 					.setRolls(ConstantValue.exactly(1))
 					.add(LootItem.lootTableItem(AllBlocks.SCHEMATICANNON.get()
-						.asItem())
+							.asItem())
 						.apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
 							.copy("Options", "BlockEntityTag.Options")))));
 			})
@@ -575,8 +576,8 @@ public class AllBlocks {
 					.modelFile(p.models()
 						.getExistingFile(p.modLoc("block/blaze_burner/"
 							+ (state.getValue(LitBlazeBurnerBlock.FLAME_TYPE) == LitBlazeBurnerBlock.FlameType.SOUL
-								? "block_with_soul_fire"
-								: "block_with_fire"))))
+							? "block_with_soul_fire"
+							: "block_with_fire"))))
 					.build()))
 			.register();
 
@@ -1058,6 +1059,17 @@ public class AllBlocks {
 			.initialProperties(SharedProperties::stone)
 			.transform(axeOrPickaxe())
 			.onRegister(addMovementBehaviour(new HarvesterMovementBehaviour()))
+			.blockstate(BlockStateGen.horizontalBlockProvider(true))
+			.addLayer(() -> RenderType::cutoutMipped)
+			.item()
+			.transform(customItemModel())
+			.register();
+
+	public static final BlockEntry<HarvesterBlock> BRASS_MECHANICAL_HARVESTER =
+		REGISTRATE.block("brass_mechanical_harvester", HarvesterBlock::new)
+			.initialProperties(SharedProperties::stone)
+			.transform(axeOrPickaxe())
+			.onRegister(addMovementBehaviour(new BrassHarvesterMovementBehaviour()))
 			.blockstate(BlockStateGen.horizontalBlockProvider(true))
 			.addLayer(() -> RenderType::cutoutMipped)
 			.item()
@@ -1560,37 +1572,37 @@ public class AllBlocks {
 		.register();
 
 	public static final BlockEntry<Block> ZINC_BLOCK = REGISTRATE.block("zinc_block", p -> new Block(p))
-			.initialProperties(() -> Blocks.IRON_BLOCK)
-			.properties(p -> p.requiresCorrectToolForDrops())
-			.transform(pickaxeOnly())
-			.tag(BlockTags.NEEDS_IRON_TOOL)
-			.tag(Tags.Blocks.STORAGE_BLOCKS)
-			.tag(BlockTags.BEACON_BASE_BLOCKS)
-			.transform(tagBlockAndItem("storage_blocks/zinc"))
-			.tag(Tags.Items.STORAGE_BLOCKS)
-			.build()
-			.lang("Block of Zinc")
-			.register();
+		.initialProperties(() -> Blocks.IRON_BLOCK)
+		.properties(p -> p.requiresCorrectToolForDrops())
+		.transform(pickaxeOnly())
+		.tag(BlockTags.NEEDS_IRON_TOOL)
+		.tag(Tags.Blocks.STORAGE_BLOCKS)
+		.tag(BlockTags.BEACON_BASE_BLOCKS)
+		.transform(tagBlockAndItem("storage_blocks/zinc"))
+		.tag(Tags.Items.STORAGE_BLOCKS)
+		.build()
+		.lang("Block of Zinc")
+		.register();
 
 	public static final BlockEntry<Block> BRASS_BLOCK = REGISTRATE.block("brass_block", p -> new Block(p))
-			.initialProperties(() -> Blocks.IRON_BLOCK)
-			.properties(p -> p.requiresCorrectToolForDrops())
-			.transform(pickaxeOnly())
-			.blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
-					.cubeAll(c.getName(), p.modLoc("block/brass_storage_block"))))
-			.tag(BlockTags.NEEDS_IRON_TOOL)
-			.tag(Tags.Blocks.STORAGE_BLOCKS)
-			.tag(BlockTags.BEACON_BASE_BLOCKS)
-			.transform(tagBlockAndItem("storage_blocks/brass"))
-			.tag(Tags.Items.STORAGE_BLOCKS)
-			.build()
-			.lang("Block of Brass")
-			.register();
+		.initialProperties(() -> Blocks.IRON_BLOCK)
+		.properties(p -> p.requiresCorrectToolForDrops())
+		.transform(pickaxeOnly())
+		.blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
+			.cubeAll(c.getName(), p.modLoc("block/brass_storage_block"))))
+		.tag(BlockTags.NEEDS_IRON_TOOL)
+		.tag(Tags.Blocks.STORAGE_BLOCKS)
+		.tag(BlockTags.BEACON_BASE_BLOCKS)
+		.transform(tagBlockAndItem("storage_blocks/brass"))
+		.tag(Tags.Items.STORAGE_BLOCKS)
+		.build()
+		.lang("Block of Brass")
+		.register();
 
 	public static final CopperBlockSet COPPER_SHINGLES = new CopperBlockSet(REGISTRATE, "copper_shingles",
 		"copper_roof_top", CopperBlockSet.DEFAULT_VARIANTS, (c, p) -> {
-			p.stonecutting(DataIngredient.tag(AllTags.forgeItemTag("plates/copper")), c::get, 2);
-		});
+		p.stonecutting(DataIngredient.tag(AllTags.forgeItemTag("plates/copper")), c::get, 2);
+	});
 
 	public static final CopperBlockSet COPPER_TILES =
 		new CopperBlockSet(REGISTRATE, "copper_tiles", "copper_roof_top", CopperBlockSet.DEFAULT_VARIANTS, (c, p) -> {
@@ -1599,6 +1611,7 @@ public class AllBlocks {
 
 	// Load this class
 
-	public static void register() {}
+	public static void register() {
+	}
 
 }
