@@ -493,6 +493,12 @@ public class AllTileEntities {
 		.renderer(() -> HarvesterRenderer::new)
 		.register();
 
+//	public static final BlockEntityEntry<BrassHarvesterTileEntity> BRASS_HARVESTER = Create.registrate()
+//		.tileEntity("brass_harvester", BrassHarvesterTileEntity::new)
+//		.validBlocks(AllBlocks.BRASS_MECHANICAL_HARVESTER)
+//		.renderer(() -> HarvesterRenderer::new)
+//		.register();
+
 	public static final BlockEntityEntry<PortableItemInterfaceTileEntity> PORTABLE_STORAGE_INTERFACE =
 		Create.registrate()
 			.tileEntity("portable_storage_interface", PortableItemInterfaceTileEntity::new)

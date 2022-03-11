@@ -52,6 +52,7 @@
     "create:portable_storage_interface",
     "create:redstone_contact",
     "create:mechanical_harvester",
+    "create:brass_mechanical_harvester",
     "create:mechanical_plough",
     "create:white_seat",
     "create:orange_seat",
