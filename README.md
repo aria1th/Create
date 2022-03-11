@@ -1,8 +1,8 @@
 <h1 align="center">Important Information</h1>
-<p align="center">This is the official Fabric port of Create.</p>
+<p align="center">This is (not) the official Fabric port of Create.</p>
 <p align="center"><b>This project is still unstable, and we do not recommend using it yet in worlds you
 care about!</b></p>
-
+<p>This branch contains Removing cart assembler, Nerfing cart assembling blocks to 14, Nerfing chute and funnel tick rate, Temporary patches to chute lag, Disabling / nerfing drill recipes, etc.... for multiplayer 'playable' server. ...at least playable within 50mspt. </p>
 [<h3 align="center">Contributing</h3>](README/CONTRIBUTING.md)
 
 <h1 align="center">Download</h1>
