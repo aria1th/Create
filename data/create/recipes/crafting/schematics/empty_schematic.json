@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "tag": "c:light_blue_dyes"
+    }
+  ],
+  "result": {
+    "item": "create:empty_schematic"
+  }
+}

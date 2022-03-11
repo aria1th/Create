@@ -1,6 +1,8 @@
 package com.simibubi.create.lib.transfer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,8 +11,12 @@ import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 
 import com.simibubi.create.lib.transfer.item.CustomStorageHandler;
 
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import org.jetbrains.annotations.Nullable;
@@ -65,14 +71,13 @@ public class TransferUtil {
 			return LazyOptional.empty();
 		}
 		// external handling
-		List<Storage<ItemVariant>> itemStorages = new ArrayList<>();
+		LinkedHashSet<Storage<ItemVariant>> itemStorages = new LinkedHashSet<>();
 		Level l = be.getLevel();
 		BlockPos pos = be.getBlockPos();
 		BlockState state = be.getBlockState();
 
 		for (Direction direction : getDirections(side)) {
 			Storage<ItemVariant> itemStorage = ItemStorage.SIDED.find(l, pos, state, be, direction);
-
 			if (itemStorage != null) {
 				if (itemStorages.size() == 0) {
 					itemStorages.add(itemStorage);
@@ -89,8 +94,8 @@ public class TransferUtil {
 		}
 
 		if (itemStorages.isEmpty()) return LazyOptional.empty();
-		if (itemStorages.size() == 1) return simplifyItem(itemStorages.get(0)).cast();
-		return simplifyItem(new CombinedStorage<>(itemStorages)).cast();
+		if (itemStorages.size() == 1) return simplifyItem(itemStorages.iterator().next()).cast();
+		return simplifyItem(new CombinedStorage<>(itemStorages.stream().toList())).cast();
 	}
 
 	// Fluids

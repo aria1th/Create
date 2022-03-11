@@ -68,7 +68,7 @@ public class InvManipulationBehaviour extends CapManipulationBehaviourBase<IItem
 			return ItemStack.EMPTY;
 
 		Predicate<ItemStack> test = getFilterTest(filter);
-		if(shouldSimulate){
+		if (shouldSimulate){
 			return extractAmountOrThresh(inventory, test, amount, amountThreshold, true);
 		}
 

@@ -201,8 +201,11 @@ public class FunnelTileEntity extends SmartTileEntity implements IHaveHoveringIn
 		int amountToExtract = getAmountToExtract();
 		ItemStack stack = invManipulation.extract(amountToExtract, s -> inputBehaviour.handleInsertion(s, facing, true)
 			.isEmpty());
-		if (stack.isEmpty())
+		if (stack.isEmpty()) {
+			//I'll kill you whoever wrote this code wtf is this lag
+			startCooldown();
 			return;
+		}
 		flap(false);
 		onTransfer(stack);
 		inputBehaviour.handleInsertion(stack, facing, false);

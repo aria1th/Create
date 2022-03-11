@@ -96,6 +96,7 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	TransportedItemStackHandlerBehaviour beltBelow;
 	boolean updateAirFlow;
 	int airCurrentUpdateCooldown;
+	private int extractionCooldown;
 	int entitySearchCooldown;
 	private static final Object2ObjectMap<Map.Entry<Level, BlockPos>, BlockApiCache<Storage<ItemVariant>, Direction>> sidedStorageCache = new Object2ObjectArrayMap<>();
 
@@ -129,6 +130,7 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 			}
 		};
 		itemPosition = new InterpolatedValue();
+		extractionCooldown = 0;
 		itemHandler = new ChuteItemHandler(this);
 		lazyHandler = LazyOptional.of(() -> itemHandler);
 		canPickUpItems = false;
@@ -183,7 +185,17 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	protected AABB createRenderBoundingBox() {
 		return new AABB(worldPosition).expandTowards(0, -3, 0);
 	}
-
+	private boolean handleCoolDown(){
+		if(extractionCooldown > 0){
+			extractionCooldown--;
+			return false;
+		}
+		extractionCooldown = AllConfigs.SERVER.logistics.defaultExtractionTimer.get();
+		return true;
+	}
+	private boolean isCoolDown(){
+		return extractionCooldown>0;
+	}
 	@Override
 	public void tick() {
 		super.tick();
@@ -196,17 +208,17 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		if (itemMotion != 0 && level != null && level.isClientSide)
 			spawnParticles(itemMotion);
 		tickAirStreams(itemMotion);
-
-		if (item.isEmpty() && !clientSide) {
+		handleCoolDown();
+		if (item.isEmpty() && !clientSide && !isCoolDown()) {
 			if (itemMotion < 0)
 				handleInputFromAbove();
 			if (itemMotion > 0)
 				handleInputFromBelow();
 			return;
 		}
-
+		if(isCoolDown())
+			return;
 		float nextOffset = itemPosition.value + itemMotion;
-
 		if (itemMotion < 0) {
 			if (nextOffset < .5f) {
 				if (!handleDownwardOutput(true))

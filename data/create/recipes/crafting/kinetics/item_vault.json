@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B",
+    "C",
+    "B"
+  ],
+  "key": {
+    "B": {
+      "tag": "c:plates/iron"
+    },
+    "C": {
+      "tag": "c:barrels/wooden"
+    }
+  },
+  "result": {
+    "item": "create:item_vault"
+  }
+}
