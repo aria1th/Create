@@ -10,10 +10,10 @@
       "item": "create:brass_casing"
     },
     "B": {
-      "tag": "c:plates/brass"
+      "tag": "c:brass_plates"
     },
     "I": {
-      "tag": "c:plates/iron"
+      "tag": "c:iron_plates"
     },
     "E": {
       "item": "create:electron_tube"
