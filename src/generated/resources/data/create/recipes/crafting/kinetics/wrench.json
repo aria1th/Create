@@ -7,7 +7,7 @@
   ],
   "key": {
     "G": {
-      "tag": "c:plates/gold"
+      "tag": "c:gold_plates"
     },
     "P": {
       "item": "create:cogwheel"
