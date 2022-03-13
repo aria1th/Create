@@ -25,3 +25,9 @@ for (root, dirs, files) in os.walk(path):
                 file.write(x)
         
 
+template = r'''{
+  "replace": false,
+  "values": [
+    "%s"
+  ]
+}'''
