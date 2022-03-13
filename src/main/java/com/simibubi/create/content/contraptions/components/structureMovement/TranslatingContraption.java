@@ -23,6 +23,10 @@ public abstract class TranslatingContraption extends Contraption {
 
 			for (StructureBlockInfo info : getBlocks().values()) {
 				BlockPos offsetPos = info.pos.relative(movementDirection);
+				if (info.state.hasBlockEntity()){
+					cachedColliders.add(info.pos);
+					continue;
+				}
 				if (info.state.getCollisionShape(world, offsetPos)
 					.isEmpty())
 					continue;
@@ -50,5 +54,5 @@ public abstract class TranslatingContraption extends Contraption {
 	public boolean canBeStabilized(Direction facing, BlockPos localPos) {
 		return false;
 	}
-	
+
 }
