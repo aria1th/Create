@@ -24,6 +24,7 @@ import com.simibubi.create.lib.util.FluidTileDataHandler;
 import com.simibubi.create.lib.util.FluidUtil;
 import com.simibubi.create.lib.util.LazyOptional;
 
+import it.unimi.dsi.fastutil.longs.Long2LongArrayMap;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,7 +51,7 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 	protected int luminosity;
 	protected int width;
 	protected int height;
-
+	private static final Long2LongArrayMap dontspamupdatepleasewhydoyoudothis = new Long2LongArrayMap();
 	private static final int SYNC_RATE = 8;
 	protected int syncCooldown;
 	protected boolean queuedSync;
@@ -149,11 +150,17 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 					FluidTankTileEntity tankAt = FluidTankConnectivityHandler.anyTankAt(level, pos);
 					if (tankAt == null)
 						continue;
-					level.updateNeighbourForOutputSignal(pos, tankAt.getBlockState()
-						.getBlock());
-					if (tankAt.luminosity == actualLuminosity)
+					if (dontspamupdatepleasewhydoyoudothis.get(pos.asLong()) == level.getGameTime()){
 						continue;
-					tankAt.setLuminosity(actualLuminosity);
+					}
+					else {
+						dontspamupdatepleasewhydoyoudothis.put(pos.asLong(), level.getGameTime());
+						level.updateNeighbourForOutputSignal(pos, tankAt.getBlockState().getBlock());
+						if (tankAt.luminosity == actualLuminosity)
+							continue;
+						tankAt.setLuminosity(actualLuminosity);
+					}
+
 				}
 			}
 		}
