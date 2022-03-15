@@ -13,7 +13,7 @@
       "tag": "c:brass_plates"
     },
     "I": {
-      "tag": "c:iron_plates"
+      "item": "indrev:diamond_drill_head"
     },
     "E": {
       "item": "create:electron_tube"

@@ -13,7 +13,7 @@
       "tag": "c:iron_plates"
     },
     "I": {
-      "tag": "c:ingots/iron"
+      "item": "indrev:diamond_drill_head"
     }
   },
   "result": {
