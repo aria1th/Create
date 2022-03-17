@@ -127,7 +127,7 @@ public class CartAssemblerTileEntity extends SmartTileEntity implements IDisplay
 
 		MountedContraption contraption = new MountedContraption(mode);
 		try {
-			if (!contraption.assembleLimited(world, pos, 15))
+			if (!contraption.assembleLimited(world, pos, 64))
 				return;
 
 			lastException = null;
