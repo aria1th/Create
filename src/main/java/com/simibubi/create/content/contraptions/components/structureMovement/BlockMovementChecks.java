@@ -7,6 +7,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags.AllBlockTags;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.components.actors.AttachedActorBlock;
+import com.simibubi.create.content.contraptions.components.actors.DrillBlock;
 import com.simibubi.create.content.contraptions.components.actors.HarvesterBlock;
 import com.simibubi.create.content.contraptions.components.actors.PloughBlock;
 import com.simibubi.create.content.contraptions.components.actors.PortableStorageInterfaceBlock;
@@ -191,6 +192,9 @@ public class BlockMovementChecks {
 
 	private static boolean isMovementAllowedFallback(BlockState state, Level world, BlockPos pos) {
 		Block block = state.getBlock();
+		if (block instanceof DrillBlock){
+			return false;
+		}
 		if (block instanceof AbstractChassisBlock)
 			return true;
 		if (state.getDestroySpeed(world, pos) == -1)
@@ -353,7 +357,7 @@ public class BlockMovementChecks {
 			return state.getValue(HarvesterBlock.FACING) == facing;
 		if (AllBlocks.MECHANICAL_PLOUGH.has(state))
 			return state.getValue(PloughBlock.FACING) == facing;
-		
+
 		if (AllBlocks.CART_ASSEMBLER.has(state))
 			return Direction.DOWN == facing;
 		if (AllBlocks.MECHANICAL_SAW.has(state))

@@ -4,6 +4,10 @@ import static com.simibubi.create.content.contraptions.components.structureMovem
 
 import java.util.Queue;
 
+import com.simibubi.create.content.contraptions.components.actors.DrillBlock;
+
+import com.simibubi.create.content.contraptions.components.saw.SawBlock;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -127,6 +131,9 @@ public class MountedContraption extends Contraption {
 	protected boolean movementAllowed(BlockState state, Level world, BlockPos pos) {
 		if (!pos.equals(anchor) && AllBlocks.CART_ASSEMBLER.has(state))
 			return testSecondaryCartAssembler(world, state, pos);
+		if (state.getBlock() instanceof DrillBlock || state.getBlock() instanceof SawBlock){
+			return false;
+		}
 		return super.movementAllowed(state, world, pos);
 	}
 
