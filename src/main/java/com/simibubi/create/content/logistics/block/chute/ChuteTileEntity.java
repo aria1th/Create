@@ -140,7 +140,11 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		//		airCurrent = new AirCurrent(this);
 		updateAirFlow = true;
 	}
+	@Nullable
 	private static Storage<ItemVariant> getOrCache(Level world, BlockPos pos, Direction direction){
+		if(world.isClientSide){
+			return null;
+		}
 		return ItemStorage.SIDED.find(world, pos, direction);
 		// return sidedStorageCache.computeIfAbsent(Map.entry(world, pos),
 		//		entry-> BlockApiCache.create(
@@ -400,7 +404,7 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		handleInput(inputStorage, 1, Direction.DOWN);
 	}
 
-	private void handleInput(Storage<ItemVariant> itemStorageOffset, float startLocation, Direction direction) {
+	private void handleInput(@Nullable Storage<ItemVariant> itemStorageOffset, float startLocation, Direction direction) {
 		//we know that upward is inventory
 		if (itemStorageOffset == null)
 			return;

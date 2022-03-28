@@ -53,7 +53,8 @@ public class ContactMovementBehaviour extends MovementBehaviour {
 	public void deactivateLastVisitedContact(MovementContext context) {
 		if (context.data.contains("lastContact")) {
 			BlockPos last = NbtUtils.readBlockPos(context.data.getCompound("lastContact"));
-			context.world.scheduleTick(last, AllBlocks.REDSTONE_CONTACT.get(), 1, TickPriority.NORMAL);
+			if(!context.world.getBlockTicks().hasScheduledTick(last, AllBlocks.REDSTONE_CONTACT.get()))
+				context.world.scheduleTick(last, AllBlocks.REDSTONE_CONTACT.get(), 1, TickPriority.NORMAL);
 			context.data.remove("lastContact");
 		}
 	}
