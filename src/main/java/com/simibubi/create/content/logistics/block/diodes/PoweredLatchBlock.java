@@ -48,7 +48,7 @@ public class PoweredLatchBlock extends ToggleLatchBlock {
 		if (worldIn.getBlockTicks()
 			.willTickThisTick(pos, this))
 			return;
-		if (back != shouldBack || side != shouldSide)
+		if (back != shouldBack || side != shouldSide && !worldIn.getBlockTicks().hasScheduledTick(pos, this))
 			worldIn.scheduleTick(pos, this, this.getDelay(state), tickpriority);
 	}
 

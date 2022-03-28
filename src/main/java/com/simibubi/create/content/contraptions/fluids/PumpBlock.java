@@ -89,7 +89,7 @@ public class PumpBlock extends DirectionalKineticBlock implements SimpleWaterlog
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighbourState, LevelAccessor world,
 		BlockPos pos, BlockPos neighbourPos) {
-		if (state.getValue(BlockStateProperties.WATERLOGGED))
+		if (state.getValue(BlockStateProperties.WATERLOGGED)&& !world.getFluidTicks().hasScheduledTick(pos, Fluids.WATER))
 			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		return state;
 	}
@@ -113,7 +113,7 @@ public class PumpBlock extends DirectionalKineticBlock implements SimpleWaterlog
 			return;
 		if (state != oldState)
 			world.scheduleTick(pos, this, 1, TickPriority.HIGH);
-		
+
 		if (isPump(state) && isPump(oldState) && state.getValue(FACING) == oldState.getValue(FACING)
 			.getOpposite()) {
 			BlockEntity tileEntity = world.getBlockEntity(pos);

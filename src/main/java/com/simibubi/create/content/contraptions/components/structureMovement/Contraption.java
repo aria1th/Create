@@ -325,6 +325,9 @@ public abstract class Contraption {
 		BlockPos pos = frontier.poll();
 		if (pos == null)
 			return false;
+		if(visited.contains(pos)){
+			return true;
+		}
 		visited.add(pos);
 
 		if (world.isOutsideBuildHeight(pos))
@@ -628,11 +631,11 @@ public abstract class Contraption {
 			blockstate = blockstate.setValue(RedstoneContactBlock.POWERED, true);
 		if (blockstate.getBlock() instanceof ButtonBlock) {
 			blockstate = blockstate.setValue(ButtonBlock.POWERED, false);
-			world.scheduleTick(pos, blockstate.getBlock(), -1);
+			world.scheduleTick(pos, blockstate.getBlock(), 1);
 		}
 		if (blockstate.getBlock() instanceof PressurePlateBlock) {
 			blockstate = blockstate.setValue(PressurePlateBlock.POWERED, false);
-			world.scheduleTick(pos, blockstate.getBlock(), -1);
+			world.scheduleTick(pos, blockstate.getBlock(), 1);
 		}
 		CompoundTag compoundnbt = getTileEntityNBT(world, pos);
 		BlockEntity tileentity = world.getBlockEntity(pos);
@@ -1053,9 +1056,10 @@ public abstract class Contraption {
 					continue;
 
 				if (nonBrittles)
-					for (Direction face : Iterate.directions)
+					for (Direction face : Iterate.directions) {
 						state = state.updateShape(face, world.getBlockState(targetPos.relative(face)), world, targetPos,
-							targetPos.relative(face));
+								targetPos.relative(face));
+					}
 
 				BlockState blockState = world.getBlockState(targetPos);
 				if (blockState.getDestroySpeed(world, targetPos) == -1 || (state.getCollisionShape(world, targetPos)

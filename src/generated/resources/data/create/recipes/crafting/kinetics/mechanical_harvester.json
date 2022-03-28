@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "AIA",
+    "ACA",
     "AIA",
     " C "
   ],
@@ -10,10 +10,10 @@
       "item": "create:andesite_casing"
     },
     "A": {
-      "item": "indrev:diamond_drill_head"
+      "item": "create:iron_sheet"
     },
     "I": {
-      "tag": "c:iron_plates"
+      "item": "minecraft:netherite_hoe"
     }
   },
   "result": {

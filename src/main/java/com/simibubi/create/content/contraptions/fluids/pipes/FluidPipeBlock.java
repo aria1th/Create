@@ -239,7 +239,7 @@ public class FluidPipeBlock extends PipeBlock implements SimpleWaterloggedBlock,
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighbourState, LevelAccessor world,
 		BlockPos pos, BlockPos neighbourPos) {
-		if (state.getValue(BlockStateProperties.WATERLOGGED))
+		if (state.getValue(BlockStateProperties.WATERLOGGED)&& !world.getFluidTicks().hasScheduledTick(pos, Fluids.WATER))
 			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		if (isOpenAt(state, direction) && neighbourState.hasProperty(BlockStateProperties.WATERLOGGED))
 			world.scheduleTick(pos, this, 1, TickPriority.HIGH);
