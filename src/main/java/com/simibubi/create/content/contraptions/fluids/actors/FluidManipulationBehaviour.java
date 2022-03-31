@@ -214,7 +214,7 @@ public abstract class FluidManipulationBehaviour extends TileEntityBehaviour {
 	}
 
 	protected boolean canDrainInfinitely(Fluid fluid) {
-		return maxBlocks() != -1 && !AllTags.AllFluidTags.NO_INFINITE_DRAINING.matches(fluid);
+		return maxBlocks() != -1;
 	}
 
 	@Override
