@@ -40,6 +40,14 @@ public class DeployingRecipeGen extends ProcessingRecipeGen {
 		CCS3 = addWax(() -> Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB, () -> Blocks.WEATHERED_CUT_COPPER_SLAB),
 		CCS4 = addWax(() -> Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB, () -> Blocks.OXIDIZED_CUT_COPPER_SLAB);
 
+	// betterend compat
+	GeneratedRecipe
+			ENDER_SHARD = create(new ResourceLocation("betterend", "ender_shard"), b -> b.require(Items.ENDER_PEARL)
+			.require(TagFactory.ITEM.create(new ResourceLocation("c", "hammers")))
+			.toolNotConsumed()
+			.output(1.0f, new ResourceLocation("betterend", "ender_shard"), 1)
+			.whenModLoaded("betterend"));
+
 	public GeneratedRecipe copperChain(CopperBlockSet set) {
 		for (Variant<?> variant : set.getVariants())
 			for (WeatherState state : WeatherState.values())
