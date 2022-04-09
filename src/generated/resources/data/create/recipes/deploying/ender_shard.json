@@ -1,0 +1,25 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:ender_pearl"
+    },
+    {
+      "tag": "c:hammers"
+    }
+  ],
+  "results": [
+    {
+      "item": "betterend:ender_shard"
+    }
+  ],
+  "keepHeldItem": true,
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "betterend"
+      ]
+    }
+  ]
+}
