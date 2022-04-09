@@ -87,7 +87,7 @@ public class FluidStorageHandler implements IFluidHandler {
 	@Override
 	public FluidStack drain(long amount, boolean sim) {
 		FluidStack extracted = FluidStack.EMPTY;
-		if (amount == 0)
+		if (amount <= 0)
 			return extracted;
 		long toExtract = amount;
 		try (Transaction t = Transaction.openOuter()) {
@@ -103,7 +103,7 @@ public class FluidStorageHandler implements IFluidHandler {
 						extracted.grow(drained);
 					}
 				}
-				if (toExtract == 0) break;
+				if (toExtract <= 0) break;
 			}
 			if (!sim)
 				t.commit();
