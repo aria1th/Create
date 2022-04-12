@@ -48,7 +48,9 @@ public class ContraptionHandler {
 				iterator.remove();
 				continue;
 			}
-			ContraptionCollider.collideEntities(contraptionEntity);
+			if(contraptionEntity.collisionEnabled() && contraptionEntity.blockPosition() != null && world.isLoaded(contraptionEntity.blockPosition())) {
+				ContraptionCollider.collideEntities(contraptionEntity);
+			}
 		}
 	}
 
