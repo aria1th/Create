@@ -136,11 +136,8 @@ public class BasinBlock extends Block implements ITE<BasinTileEntity>, IWrenchab
 		ItemEntity itemEntity = (ItemEntity) entityIn;
 		withTileEntityDo(worldIn, entityIn.blockPosition(), te -> {
 
-			// Tossed items bypass the quarter-stack limit
-			te.inputInventory.withMaxStackSize(64);
 			ItemStack insertItem = ItemHandlerHelper.insertItem(te.inputInventory, itemEntity.getItem()
 				.copy(), false);
-			te.inputInventory.withMaxStackSize(16);
 
 			if (insertItem.isEmpty()) {
 				itemEntity.discard();

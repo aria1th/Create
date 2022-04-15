@@ -10,7 +10,7 @@ public class BasinInventory extends SmartInventory {
 	private BasinTileEntity te;
 
 	public BasinInventory(int slots, BasinTileEntity te) {
-		super(slots, te, 16, true);
+		super(slots, te);
 		this.te = te;
 	}
 
