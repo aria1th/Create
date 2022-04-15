@@ -2,6 +2,8 @@ package com.simibubi.create;
 
 import java.util.Random;
 
+import com.simibubi.create.content.contraptions.components.motor.ElectricMotorTileEntity;
+
 import io.github.tropheusj.milk.Milk;
 
 import org.apache.logging.log4j.LogManager;
@@ -41,6 +43,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import team.reborn.energy.api.EnergyStorage;
 
 public class Create implements ModInitializer {
 
@@ -112,6 +115,8 @@ public class Create implements ModInitializer {
 
 		AllTileEntities.registerStorages();
 		AllPackets.channel.initServerListener();
+
+		EnergyStorage.SIDED.registerForBlockEntity(ElectricMotorTileEntity::getEnergyStorage, AllTileEntities.ELECTRIC_MOTOR.get());
 	}
 
 	public static void init() {

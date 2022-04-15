@@ -49,6 +49,9 @@ import com.simibubi.create.content.contraptions.components.mixer.MechanicalMixer
 import com.simibubi.create.content.contraptions.components.mixer.MixerInstance;
 import com.simibubi.create.content.contraptions.components.motor.CreativeMotorRenderer;
 import com.simibubi.create.content.contraptions.components.motor.CreativeMotorTileEntity;
+import com.simibubi.create.content.contraptions.components.motor.ElectricMotorBlock;
+import com.simibubi.create.content.contraptions.components.motor.ElectricMotorRenderer;
+import com.simibubi.create.content.contraptions.components.motor.ElectricMotorTileEntity;
 import com.simibubi.create.content.contraptions.components.press.MechanicalPressRenderer;
 import com.simibubi.create.content.contraptions.components.press.MechanicalPressTileEntity;
 import com.simibubi.create.content.contraptions.components.press.PressInstance;
@@ -184,6 +187,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import team.reborn.energy.api.EnergyStorage;
 
 public class AllTileEntities {
 
@@ -214,6 +218,13 @@ public class AllTileEntities {
 		.validBlocks(AllBlocks.CREATIVE_MOTOR)
 		.renderer(() -> CreativeMotorRenderer::new)
 		.register();
+
+	public static final BlockEntityEntry<ElectricMotorTileEntity> ELECTRIC_MOTOR = Create.registrate()
+			.tileEntity("electric_motor", ElectricMotorTileEntity::new)
+			.instance(() -> HalfShaftInstance::new)
+			.validBlocks(AllBlocks.ELECTRIC_MOTOR)
+			.renderer(() -> ElectricMotorRenderer::new)
+			.register();
 
 	public static final BlockEntityEntry<GearboxTileEntity> GEARBOX = Create.registrate()
 		.tileEntity("gearbox", GearboxTileEntity::new)

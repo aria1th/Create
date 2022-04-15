@@ -46,6 +46,8 @@ import com.simibubi.create.content.contraptions.components.millstone.MillstoneBl
 import com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerBlock;
 import com.simibubi.create.content.contraptions.components.motor.CreativeMotorBlock;
 import com.simibubi.create.content.contraptions.components.motor.CreativeMotorGenerator;
+import com.simibubi.create.content.contraptions.components.motor.ElectricMotorBlock;
+import com.simibubi.create.content.contraptions.components.motor.ElectricMotorTileEntity;
 import com.simibubi.create.content.contraptions.components.press.MechanicalPressBlock;
 import com.simibubi.create.content.contraptions.components.saw.SawBlock;
 import com.simibubi.create.content.contraptions.components.saw.SawGenerator;
@@ -419,6 +421,14 @@ public class AllBlocks {
 			.transform(BlockStressDefaults.setCapacity(16384.0))
 			.item()
 			.properties(p -> p.rarity(Rarity.EPIC))
+			.transform(customItemModel())
+			.register();
+
+	public static final BlockEntry<ElectricMotorBlock> ELECTRIC_MOTOR = REGISTRATE.block("electric_motor", ElectricMotorBlock::new)
+			.initialProperties(SharedProperties::stone)
+			.tag(AllBlockTags.SAFE_NBT.tag)
+			.transform(BlockStressDefaults.setCapacity(ElectricMotorTileEntity.CAPACITY / 256))
+			.item()
 			.transform(customItemModel())
 			.register();
 
