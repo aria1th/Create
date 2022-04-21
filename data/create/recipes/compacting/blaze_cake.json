@@ -8,7 +8,7 @@
       "item": "minecraft:sugar"
     },
     {
-      "item": "create:cinder_flour"
+      "tag": "c:netherrack_dusts"
     }
   ],
   "results": [

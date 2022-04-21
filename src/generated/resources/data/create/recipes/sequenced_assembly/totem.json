@@ -1,0 +1,99 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "betterend:amber_block"
+  },
+  "transitionalItem": {
+    "item": "betterend:raw_amber"
+  },
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "betterend:raw_amber"
+        },
+        {
+          "tag": "c:sapphires"
+        }
+      ],
+      "results": [
+        {
+          "item": "betterend:raw_amber"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "betterend:raw_amber"
+        },
+        {
+          "tag": "c:rubies"
+        }
+      ],
+      "results": [
+        {
+          "item": "betterend:raw_amber"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "betterend:raw_amber"
+        },
+        {
+          "tag": "c:peridot_gems"
+        }
+      ],
+      "results": [
+        {
+          "item": "betterend:raw_amber"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "betterend:raw_amber"
+        },
+        {
+          "tag": "c:diamonds"
+        }
+      ],
+      "results": [
+        {
+          "item": "betterend:raw_amber"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:totem_of_undying",
+      "count": 1,
+      "chance": 14.0
+    },
+    {
+      "item": "betterend:raw_amber",
+      "chance": 2.0
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:poisonous_potato"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  ],
+  "loops": 16
+}

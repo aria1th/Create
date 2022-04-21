@@ -1,0 +1,49 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "tag": "techreborn:gems"
+  },
+  "transitionalItem": {
+    "item": "minecraft:stone"
+  },
+  "sequence": [
+    {
+      "type": "create:haunting",
+      "ingredients": [
+        {
+          "item": "minecraft:stone"
+        }
+      ],
+      "results": [
+        {
+          "item": "minecraft:stone"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:emerald",
+      "chance": 60.0
+    },
+    {
+      "item": "techreborn:peridot_gem",
+      "count": 1,
+      "chance": 10.0
+    },
+    {
+      "item": "techreborn:ruby_gem",
+      "count": 1,
+      "chance": 10.0
+    },
+    {
+      "item": "techreborn:sapphire_gem",
+      "count": 1,
+      "chance": 10.0
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "loops": 2
+}

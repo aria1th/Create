@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:turtle_egg"
+  },
+  "transitionalItem": {
+    "item": "minecraft:egg"
+  },
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "minecraft:egg"
+        },
+        {
+          "tag": "c:obsidian_dusts"
+        }
+      ],
+      "results": [
+        {
+          "item": "minecraft:egg"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:dragon_egg",
+      "chance": 80.0
+    },
+    {
+      "item": "minecraft:turtle_egg",
+      "count": 1,
+      "chance": 19.0
+    },
+    {
+      "item": "techreborn:obsidian_dust"
+    }
+  ],
+  "loops": 60
+}
