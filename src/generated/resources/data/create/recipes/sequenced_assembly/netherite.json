@@ -1,0 +1,42 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "tag": "c:netherrack_dusts"
+  },
+  "transitionalItem": {
+    "item": "techreborn:netherrack_dust"
+  },
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "techreborn:netherrack_dust"
+        },
+        {
+          "tag": "c:gold_dusts"
+        }
+      ],
+      "results": [
+        {
+          "item": "techreborn:netherrack_dust"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item": "indrev:netherite_scrap_dust",
+      "chance": 1.0
+    },
+    {
+      "item": "techreborn:netherrack_dust",
+      "count": 1,
+      "chance": 98.0
+    },
+    {
+      "item": "minecraft:netherite_scrap"
+    }
+  ],
+  "loops": 20
+}
