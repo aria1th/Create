@@ -63,6 +63,11 @@ public class HosePulleyFluidHandler implements IFluidHandler {
 	}
 
 	private FluidStack drainInternal(long maxDrain, @Nullable FluidStack resource, boolean sim) {
+		if (drainer.infinite){
+			FluidStack fluid = internalTank.getFluid().copy();
+			fluid.setAmount(Math.min(maxDrain, FluidConstants.BUCKET));
+			return fluid;
+		}
 		if (resource != null && !internalTank.isEmpty() && !resource.isFluidEqual(internalTank.getFluid()))
 			return FluidStack.EMPTY;
 		if (internalTank.getFluidAmount() >= FluidConstants.BUCKET)

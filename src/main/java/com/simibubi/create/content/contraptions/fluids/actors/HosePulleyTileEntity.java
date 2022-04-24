@@ -28,7 +28,7 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 
 	LerpedFloat offset;
 	boolean isMoving;
-
+	private FluidStack cachedFluid;
 	private SmartFluidTank internalTank;
 	private LazyOptional<IFluidHandler> capability;
 	private FluidDrainingBehaviour drainer;
@@ -50,6 +50,10 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 	@Override
 	public void sendData() {
 		infinite = filler.infinite || drainer.infinite;
+		if(infinite && (cachedFluid == null || cachedFluid.isEmpty())){
+			cachedFluid = internalTank.getFluid().copy();
+			cachedFluid.setAmount(internalTank.getCapacity());
+		}
 		super.sendData();
 	}
 
@@ -120,7 +124,9 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 		}
 		if (getSpeed() == 0)
 			isMoving = false;
-
+		if(infinite && cachedFluid != null){
+			this.internalTank.setFluid(cachedFluid.copy());
+		}
 		offset.setValue(newOffset);
 		invalidateRenderBoundingBox();
 	}
@@ -162,6 +168,10 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 		super.read(compound, clientPacket);
 		if (clientPacket)
 			infinite = compound.getBoolean("Infinite");
+		if(infinite && (cachedFluid == null || cachedFluid.isEmpty())){
+			cachedFluid = internalTank.getFluid().copy();
+			cachedFluid.setAmount(internalTank.getCapacity());
+		}
 	}
 
 	@Override
