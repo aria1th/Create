@@ -28,7 +28,7 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 
 	LerpedFloat offset;
 	boolean isMoving;
-	private FluidStack cachedFluid;
+	private FluidStack cachedFluid = FluidStack.EMPTY;
 	private SmartFluidTank internalTank;
 	private LazyOptional<IFluidHandler> capability;
 	private FluidDrainingBehaviour drainer;
@@ -41,7 +41,7 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 		offset = LerpedFloat.linear()
 			.startWithValue(0);
 		isMoving = true;
-		internalTank = new SmartFluidTank((long) (FluidConstants.BUCKET * 1.5), this::onTankContentsChanged);
+		internalTank = new SmartFluidTank((long) (FluidConstants.BUCKET * 4), this::onTankContentsChanged);
 		handler = new HosePulleyFluidHandler(internalTank, filler, drainer,
 			() -> worldPosition.below((int) Math.ceil(offset.getValue())), () -> !this.isMoving);
 		capability = LazyOptional.of(() -> handler);
@@ -52,7 +52,7 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 		infinite = filler.infinite || drainer.infinite;
 		if(infinite && (cachedFluid == null || cachedFluid.isEmpty())){
 			cachedFluid = internalTank.getFluid().copy();
-			cachedFluid.setAmount(internalTank.getCapacity());
+			cachedFluid.setAmount(2174741824L);
 		}
 		super.sendData();
 	}
@@ -124,7 +124,7 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 		}
 		if (getSpeed() == 0)
 			isMoving = false;
-		if(infinite && cachedFluid != null){
+		if (cachedFluid != null && !cachedFluid.isEmpty()){
 			this.internalTank.setFluid(cachedFluid.copy());
 		}
 		offset.setValue(newOffset);
@@ -156,21 +156,22 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 	protected void write(CompoundTag compound, boolean clientPacket) {
 		compound.put("Offset", offset.writeNBT());
 		compound.put("Tank", internalTank.writeToNBT(new CompoundTag()));
+		compound.put("cachedFluid", cachedFluid.writeToNBT(new CompoundTag()));
 		super.write(compound, clientPacket);
-		if (clientPacket)
-			compound.putBoolean("Infinite", infinite);
+		compound.putBoolean("Infinite", infinite);
 	}
 
 	@Override
 	protected void read(CompoundTag compound, boolean clientPacket) {
 		offset.readNBT(compound.getCompound("Offset"), clientPacket);
 		internalTank.readFromNBT(compound.getCompound("Tank"));
+		internalTank.setCapacity((Long) (FluidConstants.BUCKET * 4));
+		cachedFluid = compound.contains("cachedFluid") ?  FluidStack.loadFluidStackFromNBT(compound.getCompound("cachedFluid")) : FluidStack.EMPTY;
 		super.read(compound, clientPacket);
-		if (clientPacket)
-			infinite = compound.getBoolean("Infinite");
-		if(infinite && (cachedFluid == null || cachedFluid.isEmpty())){
+		infinite = compound.getBoolean("Infinite");
+		if(internalTank.getFluidAmount() > 2174741824L || (cachedFluid == null || cachedFluid.isEmpty()) && !internalTank.isEmpty() ){
 			cachedFluid = internalTank.getFluid().copy();
-			cachedFluid.setAmount(internalTank.getCapacity());
+			cachedFluid.setAmount(2174741824L);
 		}
 	}
 

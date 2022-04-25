@@ -116,7 +116,7 @@ public class FluidDrainingBehaviour extends FluidManipulationBehaviour {
 				emptied = Blocks.AIR.defaultBlockState();
 			}
 
-			if (this.fluid == null)
+			if (this.fluid == null || this.fluid == Fluids.EMPTY)
 				this.fluid = fluid;
 
 			if (!this.fluid.isSame(fluid)) {

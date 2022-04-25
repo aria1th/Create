@@ -145,6 +145,7 @@ public class FluidStack {
 		return nbt;
 	}
 
+
 	public static FluidStack loadFluidStackFromNBT(CompoundTag tag) {
 		FluidStack stack;
 		if (tag.contains("FluidName")) {
