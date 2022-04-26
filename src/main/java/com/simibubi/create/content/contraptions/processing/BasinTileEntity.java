@@ -126,9 +126,9 @@ public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 			.forRecipes();
 		behaviours.add(filtering);
 
-		inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 2, FluidConstants.BUCKET, true)
+		inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 2, FluidConstants.BUCKET* 4, true)
 			.whenFluidUpdates(() -> contentsChanged = true);
-		outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 2, FluidConstants.BUCKET, true)
+		outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 2, FluidConstants.BUCKET* 4, true)
 			.whenFluidUpdates(() -> contentsChanged = true)
 			.forbidInsertion();
 		behaviours.add(inputTank);
