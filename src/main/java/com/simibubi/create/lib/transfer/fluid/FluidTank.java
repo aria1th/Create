@@ -88,7 +88,7 @@ public class FluidTank implements IFluidHandler {
 
 	@Override
 	public long fill(FluidStack resource, boolean sim) {
-		if (resource.isEmpty() || !isFluidValid(0, resource)) {
+		if (resource.isEmpty() || !isFluidValid(0, resource) || capacity < fluid.getAmount()) {
 			return 0;
 		}
 		if (sim) {

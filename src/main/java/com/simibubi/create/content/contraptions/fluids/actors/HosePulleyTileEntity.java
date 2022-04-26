@@ -169,9 +169,9 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 		cachedFluid = compound.contains("cachedFluid") ?  FluidStack.loadFluidStackFromNBT(compound.getCompound("cachedFluid")) : FluidStack.EMPTY;
 		super.read(compound, clientPacket);
 		infinite = compound.getBoolean("Infinite");
-		if(internalTank.getFluidAmount() > 2174741824L || (cachedFluid == null || cachedFluid.isEmpty()) && !internalTank.isEmpty() ){
+		if(internalTank.getFluidAmount() > 2147483624L || (cachedFluid == null || cachedFluid.isEmpty()) && !internalTank.isEmpty() ){
 			cachedFluid = internalTank.getFluid().copy();
-			cachedFluid.setAmount(2174741824L);
+			cachedFluid.setAmount(2147483624L);
 		}
 	}
 
