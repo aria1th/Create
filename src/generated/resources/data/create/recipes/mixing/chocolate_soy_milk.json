@@ -8,7 +8,7 @@
       "item": "minecraft:cocoa_beans"
     },
     {
-      "fluid": "milk:still_milk",
+      "fluid": "liquified:soy_milk",
       "amount": 27000
     }
   ],
