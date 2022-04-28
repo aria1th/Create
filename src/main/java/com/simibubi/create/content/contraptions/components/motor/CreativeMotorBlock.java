@@ -54,7 +54,7 @@ public class CreativeMotorBlock extends DirectionalKineticBlock implements ITE<C
 	public boolean hideStressImpact() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
 		return false;
@@ -69,5 +69,5 @@ public class CreativeMotorBlock extends DirectionalKineticBlock implements ITE<C
 	public BlockEntityType<? extends CreativeMotorTileEntity> getTileEntityType() {
 		return AllTileEntities.MOTOR.get();
 	}
-	
+
 }
