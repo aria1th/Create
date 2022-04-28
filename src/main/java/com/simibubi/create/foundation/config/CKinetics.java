@@ -8,6 +8,7 @@ public class CKinetics extends ConfigBase {
 	public final ConfigInt maxBeltLength = i(20, 5, "maxBeltLength", Comments.maxBeltLength);
 	public final ConfigInt crushingDamage = i(4, 0, "crushingDamage", Comments.crushingDamage);
 	public final ConfigInt maxMotorSpeed = i(256, 64, "maxMotorSpeed", Comments.rpm, Comments.maxMotorSpeed, ConfigAnnotations.RequiresRestart.BOTH.asComment());
+	public final ConfigInt motorStressPerEnergy = i(16, 1, "motorStressPerEnergy");
 	public final ConfigInt waterWheelBaseSpeed = i(4, 1, "waterWheelBaseSpeed", Comments.rpm, Comments.waterWheelBaseSpeed);
 	public final ConfigInt waterWheelFlowSpeed = i(4, 1, "waterWheelFlowSpeed", Comments.rpm, Comments.waterWheelFlowSpeed);
 	public final ConfigInt furnaceEngineSpeed = i(16, 1, "furnaceEngineSpeed", Comments.rpm, Comments.furnaceEngineSpeed);

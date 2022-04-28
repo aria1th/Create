@@ -427,7 +427,8 @@ public class AllBlocks {
 	public static final BlockEntry<ElectricMotorBlock> ELECTRIC_MOTOR = REGISTRATE.block("electric_motor", ElectricMotorBlock::new)
 			.initialProperties(SharedProperties::stone)
 			.tag(AllBlockTags.SAFE_NBT.tag)
-			.transform(BlockStressDefaults.setCapacity(ElectricMotorTileEntity.CAPACITY / 256))
+			.transform(pickaxeOnly())
+			.blockstate(new CreativeMotorGenerator()::generate)
 			.item()
 			.transform(customItemModel())
 			.register();
