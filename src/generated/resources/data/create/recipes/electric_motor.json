@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "CNC",
+    "IYI"
+  ],
+  "key": {
+    "#": {
+      "item": "create:shaft"
+    },
+    "C": {
+      "tag": "c:copper_plates"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    },
+    "I": {
+      "tag": "c:iron_plates"
+    },
+    "Y": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "result": {
+    "item": "create:electric_motor"
+  }
+}

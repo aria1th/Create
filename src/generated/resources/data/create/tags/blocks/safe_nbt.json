@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "create:creative_motor",
+    "create:electric_motor",
     "create:creative_fluid_tank",
     "create:mechanical_piston",
     "create:sticky_mechanical_piston",
