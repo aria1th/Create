@@ -156,20 +156,24 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 	protected void write(CompoundTag compound, boolean clientPacket) {
 		compound.put("Offset", offset.writeNBT());
 		compound.put("Tank", internalTank.writeToNBT(new CompoundTag()));
-		compound.put("cachedFluid", cachedFluid.writeToNBT(new CompoundTag()));
+		if (infinite) compound.put("cachedFluid", cachedFluid.writeToNBT(new CompoundTag()));
 		super.write(compound, clientPacket);
 		compound.putBoolean("Infinite", infinite);
 	}
 
 	@Override
 	protected void read(CompoundTag compound, boolean clientPacket) {
+		if (clientPacket){
+			return;
+		}
 		offset.readNBT(compound.getCompound("Offset"), clientPacket);
 		internalTank.readFromNBT(compound.getCompound("Tank"));
 		internalTank.setCapacity((Long) (FluidConstants.BUCKET * 4));
 		cachedFluid = compound.contains("cachedFluid") ?  FluidStack.loadFluidStackFromNBT(compound.getCompound("cachedFluid")) : FluidStack.EMPTY;
 		super.read(compound, clientPacket);
 		infinite = compound.getBoolean("Infinite");
-		if(internalTank.getFluidAmount() > 2147483624L || (cachedFluid == null || cachedFluid.isEmpty()) && !internalTank.isEmpty() ){
+		if(internalTank.getFluidAmount() > 1048576L || ( infinite && (cachedFluid == null || cachedFluid.isEmpty())) && !internalTank.isEmpty() ){
+			infinite = true;
 			cachedFluid = internalTank.getFluid().copy();
 			cachedFluid.setAmount(2147483624L);
 		}
