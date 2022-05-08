@@ -125,16 +125,21 @@ public class ElectricMotorTileEntity extends GeneratingKineticTileEntity {
 
 	@Override
 	protected void read(CompoundTag compound, boolean clientPacket) {
+		super.read(compound, clientPacket);
 		active = compound.getBoolean("active");
 		capacity = compound.getInt("capacity");
-		super.read(compound, clientPacket);
+		CompoundTag energyStorageTag = compound.getCompound("EnergyStorage");
+		energyStorage.amount = energyStorageTag.getLong("energy");
 	}
 
 	@Override
 	protected void write(CompoundTag compound, boolean clientPacket) {
+		super.write(compound, clientPacket);
 		compound.putBoolean("active", active);
 		compound.putInt("capacity", capacity);
-		super.write(compound, clientPacket);
+		CompoundTag energyStorageTag = new CompoundTag();
+		energyStorageTag.putLong("energy", energyStorage.amount);
+		compound.put("EnergyStorage", energyStorageTag);
 	}
 
 	@Override
