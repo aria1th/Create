@@ -33,12 +33,12 @@ public class DepotItemHandler implements IItemHandler {
 			return stack;
 		if (!te.isOutputEmpty() && !te.canMergeItems())
 			return stack;
-		int count = stack.getCount();
-		int maxCount = stack.getMaxStackSize();
-		ItemStack newStack = stack.split(maxCount);
-		ItemStack remainder = te.insert(new TransportedItemStack(newStack), simulate);
-		remainder.setCount(remainder.getCount() + stack.getCount());
-		if (!simulate && remainder != stack)
+		ItemStack stackWithCountLimit = stack.copy().split(stack.getMaxStackSize());
+		ItemStack stackWithCountLimitRemainder = stack.copy();
+		stackWithCountLimitRemainder.shrink(stackWithCountLimit.getCount());
+		ItemStack remainder = te.insert(new TransportedItemStack(stackWithCountLimit), simulate);
+		remainder.grow(stackWithCountLimitRemainder.getCount());
+		if (!simulate && remainder != stackWithCountLimit)
 			te.tileEntity.notifyUpdate();
 		return remainder;
 	}
@@ -52,7 +52,7 @@ public class DepotItemHandler implements IItemHandler {
 		if (held == null)
 			return ItemStack.EMPTY;
 		ItemStack stack = held.stack.copy();
-		ItemStack extracted = stack.split(Math.min(amount, stack.getCount()));
+		ItemStack extracted = stack.split(Math.min(stack.getCount(), amount));
 		if (!simulate) {
 			te.heldItem.stack = stack;
 			if (stack.isEmpty())
