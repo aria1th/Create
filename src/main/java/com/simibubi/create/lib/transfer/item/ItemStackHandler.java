@@ -69,7 +69,7 @@ public class ItemStackHandler implements IItemHandlerModifiable, NBTSerializable
 
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean sim) {
-		if (amount == 0) return ItemStack.EMPTY;
+		if (amount <= 0) return ItemStack.EMPTY;
 
 		ItemStack oldStack = getStackInSlot(slot);
 		if (oldStack.isEmpty()) return ItemStack.EMPTY;
