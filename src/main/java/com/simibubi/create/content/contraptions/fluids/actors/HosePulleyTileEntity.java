@@ -163,9 +163,6 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 
 	@Override
 	protected void read(CompoundTag compound, boolean clientPacket) {
-		if (clientPacket){
-			return;
-		}
 		offset.readNBT(compound.getCompound("Offset"), clientPacket);
 		internalTank.readFromNBT(compound.getCompound("Tank"));
 		internalTank.setCapacity((Long) (FluidConstants.BUCKET * 4));
