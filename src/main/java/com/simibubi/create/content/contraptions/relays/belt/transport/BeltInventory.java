@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.simibubi.create.content.contraptions.relays.belt.BeltBlock;
 import com.simibubi.create.content.contraptions.relays.belt.BeltHelper;
@@ -75,6 +76,12 @@ public class BeltInventory {
 		TransportedItemStack stackInFront = null;
 		TransportedItemStack currentItem = null;
 		Iterator<TransportedItemStack> iterator = items.iterator();
+
+		if (items.size() > 64){
+			items.clear();
+			System.out.println("Belt had too many items!! forcibly removing it...");
+			return;
+		}
 
 		// Useful stuff
 		float beltSpeed = belt.getDirectionAwareBeltMovementSpeed();
