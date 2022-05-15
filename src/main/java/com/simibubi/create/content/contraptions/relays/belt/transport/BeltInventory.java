@@ -78,8 +78,10 @@ public class BeltInventory {
 		Iterator<TransportedItemStack> iterator = items.iterator();
 
 		if (items.size() > 64){
+			items.forEach(System.out::println);
 			items.clear();
 			System.out.println("Belt had too many items!! forcibly removing it...");
+			System.out.println(belt.getBlockPos());
 			return;
 		}
 
