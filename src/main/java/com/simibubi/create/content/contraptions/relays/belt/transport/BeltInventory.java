@@ -2,6 +2,7 @@ package com.simibubi.create.content.contraptions.relays.belt.transport;
 
 import static com.simibubi.create.content.contraptions.relays.belt.transport.BeltTunnelInteractionHandler.flapTunnel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -75,16 +76,20 @@ public class BeltInventory {
 		// Assuming the first entry is furthest on the belt
 		TransportedItemStack stackInFront = null;
 		TransportedItemStack currentItem = null;
-		Iterator<TransportedItemStack> iterator = items.iterator();
 
 		if (items.size() > 64){
-			items.forEach(System.out::println);
+			mergeItemListsFixFPError();
+			System.out.println("Belt had too many items!! forcibly merging it...(64)");
+		}
+		if (items.size() > 256){
+			items.forEach(a -> System.out.println(a.beltPosition));
+			items.forEach(this::eject);
 			items.clear();
-			System.out.println("Belt had too many items!! forcibly removing it...");
+			System.out.println("Belt had too many items!! forcibly popping it...(256)");
 			System.out.println(belt.getBlockPos());
 			return;
 		}
-
+		Iterator<TransportedItemStack> iterator = items.iterator();
 		// Useful stuff
 		float beltSpeed = belt.getDirectionAwareBeltMovementSpeed();
 		Direction movementFacing = belt.getMovementFacing();
@@ -96,17 +101,20 @@ public class BeltInventory {
 
 		// resolve ending only when items will reach it this tick
 		Ending ending = Ending.UNRESOLVED;
-
+		boolean previousNoMove = false;
+		int counter = 0;
 		// Loop over items
 		while (iterator.hasNext()) {
 			stackInFront = currentItem;
 			currentItem = iterator.next();
+
 			currentItem.prevBeltPosition = currentItem.beltPosition;
 			currentItem.prevSideOffset = currentItem.sideOffset;
 
 			if (currentItem.stack.isEmpty()) {
 				iterator.remove();
 				currentItem = null;
+				previousNoMove = false;
 				continue;
 			}
 
@@ -115,17 +123,22 @@ public class BeltInventory {
 				movement *= ServerSpeedProvider.get();
 
 			// Don't move if held by processing (client)
-			if (world.isClientSide && currentItem.locked)
+			if (world.isClientSide && currentItem.locked){
+				previousNoMove = true;
 				continue;
+			}
+
 
 			// Don't move if held by external components
 			if (currentItem.lockedExternally) {
 				currentItem.lockedExternally = false;
+				previousNoMove = true;
 				continue;
 			}
 
 			// Don't move if other items are waiting in front
 			boolean noMovement = false;
+
 			float currentPos = currentItem.beltPosition;
 			if (stackInFront != null) {
 				float diff = stackInFront.beltPosition - currentPos;
@@ -134,7 +147,7 @@ public class BeltInventory {
 				movement =
 					beltMovementPositive ? Math.min(movement, diff - spacing) : Math.max(movement, diff + spacing);
 			}
-
+			counter += 1;
 			// Don't move beyond the edge
 			float diffToEnd = beltMovementPositive ? belt.beltLength - currentPos : -currentPos;
 			if (Math.abs(diffToEnd) < Math.abs(movement) + 1) {
@@ -149,16 +162,20 @@ public class BeltInventory {
 			// Belt item processing
 			if (!onClient && horizontal) {
 				ItemStack item = currentItem.stack;
-				if (handleBeltProcessingAndCheckIfRemoved(currentItem, nextOffset, noMovement)) {
+				if (!previousNoMove && handleBeltProcessingAndCheckIfRemoved(currentItem, nextOffset, noMovement)) {
 					iterator.remove();
 					belt.sendData();
+					previousNoMove = noMovement;
 					continue;
 				}
 				if (item != currentItem.stack)
 					belt.sendData();
-				if (currentItem.locked)
+				if (currentItem.locked) {
+					previousNoMove = noMovement;
 					continue;
+				}
 			}
+			previousNoMove = noMovement;
 // Belt Funnels
 			if (BeltFunnelInteractionHandler.checkForFunnels(this, currentItem, nextOffset))
 				continue;
@@ -221,6 +238,28 @@ public class BeltInventory {
 				belt.sendData();
 				continue;
 			}
+		}
+	}
+	private void mergeItemListsFixFPError(){
+		TransportedItemStack previousStack = null;
+		List<TransportedItemStack> markForRemove = new ArrayList<>(64);
+		for (TransportedItemStack currentStack : this.items){
+			if (previousStack == null){
+				previousStack = currentStack;
+				continue;
+			}
+			if (Math.abs(currentStack.beltPosition - previousStack.beltPosition) < 0.03 && currentStack.stack.sameItem(previousStack.stack) &
+					previousStack.stack.getCount() <= previousStack.stack.getMaxStackSize()){
+				previousStack.stack.grow(currentStack.stack.getCount());
+				currentStack.stack.setCount(0);
+				markForRemove.add(currentStack);
+			}
+			else {
+				previousStack = currentStack;
+			}
+		}
+		for (TransportedItemStack i : markForRemove){
+			this.items.remove(i);
 		}
 	}
 
