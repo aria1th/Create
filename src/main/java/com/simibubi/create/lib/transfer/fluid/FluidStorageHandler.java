@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
 /**
  * Wraps a Storage in an IFluidHandler, for use in Create
@@ -19,12 +20,28 @@ public class FluidStorageHandler implements IFluidHandler {
 	@Override
 	public int getTanks() {
 		int tanks = 0;
-		try (Transaction t = Transaction.openOuter()) {
-			for (StorageView<FluidVariant> view : storage.iterable(t)) {
-				tanks++;
+		if (Transaction.isOpen()){
+			try {
+				TransactionContext t = Transaction.getCurrentUnsafe();
+				for (StorageView<FluidVariant> view : storage.iterable(t)) {
+					tanks++;
+				}
 			}
-			t.abort();
+			catch (Exception ignored){
+
+			}
 		}
+		else {
+			try (Transaction t = Transaction.openOuter()) {
+				for (StorageView<FluidVariant> view : storage.iterable(t)) {
+					tanks++;
+				}
+				t.abort();
+			}
+			catch (Exception ignored){
+			}
+		}
+
 		return tanks;
 	}
 
@@ -39,6 +56,9 @@ public class FluidStorageHandler implements IFluidHandler {
 				index++;
 			}
 			t.abort();
+		}
+		catch (Exception ignored){
+
 		}
 		return FluidStack.EMPTY;
 	}
@@ -55,6 +75,9 @@ public class FluidStorageHandler implements IFluidHandler {
 			}
 			t.abort();
 		}
+		catch (Exception ignored){
+
+		}
 		return 0;
 	}
 
@@ -69,6 +92,9 @@ public class FluidStorageHandler implements IFluidHandler {
 			}
 			return filled;
 		}
+		catch (Exception ignored){
+			return 0;
+		}
 	}
 
 	@Override
@@ -81,6 +107,9 @@ public class FluidStorageHandler implements IFluidHandler {
 				t.commit();
 			}
 			return stack.copy().setAmount(extracted);
+		}
+		catch (Exception ignored){
+			return FluidStack.EMPTY;
 		}
 	}
 
@@ -107,6 +136,9 @@ public class FluidStorageHandler implements IFluidHandler {
 			}
 			if (!sim)
 				t.commit();
+		}
+		catch (Exception ignored){
+
 		}
 		return extracted;
 	}
