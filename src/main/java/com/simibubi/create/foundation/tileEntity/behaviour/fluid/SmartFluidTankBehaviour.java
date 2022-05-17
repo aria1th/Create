@@ -1,5 +1,6 @@
 package com.simibubi.create.foundation.tileEntity.behaviour.fluid;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -64,7 +65,9 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 		this.fluidUpdateCallback = fluidUpdateCallback;
 		return this;
 	}
-
+	public boolean isFull(){
+		return Arrays.stream(this.getTanks()).allMatch(a -> a.tank.getFluidAmount() >= a.tank.getCapacity());
+	}
 	public SmartFluidTankBehaviour allowInsertion() {
 		insertionAllowed = true;
 		return this;

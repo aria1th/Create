@@ -54,6 +54,9 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 			cachedFluid = internalTank.getFluid().copy();
 			cachedFluid.setAmount(2174741824L);
 		}
+		if (infinite){
+			this.internalTank.setFluid(cachedFluid.copy());
+		}
 		super.sendData();
 	}
 
@@ -124,6 +127,11 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 		}
 		if (getSpeed() == 0)
 			isMoving = false;
+		if (cachedFluid == null && internalTank.getFluidAmount() > 1048576L){
+			infinite = true;
+			cachedFluid = internalTank.getFluid().copy();
+			cachedFluid.setAmount(2147483624L);
+		}
 		if (cachedFluid != null && !cachedFluid.isEmpty()){
 			this.internalTank.setFluid(cachedFluid.copy());
 		}

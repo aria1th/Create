@@ -445,7 +445,7 @@ public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	}
 
 	public boolean canContinueProcessing() {
-		return spoutputBuffer.isEmpty() && spoutputFluidBuffer.isEmpty();
+		return spoutputBuffer.isEmpty() && spoutputFluidBuffer.isEmpty() && !outputTank.isFull();
 	}
 
 	public boolean acceptOutputs(List<ItemStack> outputItems, List<FluidStack> outputFluids, boolean simulate) {

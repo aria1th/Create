@@ -1,5 +1,6 @@
 package com.simibubi.create.content.contraptions.processing;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +24,8 @@ public abstract class BasinOperatingTileEntity extends KineticTileEntity {
 	public DeferralBehaviour basinChecker;
 	public boolean basinRemoved;
 	protected Recipe<?> currentRecipe;
+	protected Recipe<?> previousValidRecipe = null;
+	private int inactiveTick = 0;
 
 	public BasinOperatingTileEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
 		super(typeIn, pos, state);
@@ -57,22 +60,43 @@ public abstract class BasinOperatingTileEntity extends KineticTileEntity {
 	}
 
 	protected boolean updateBasin() {
-		if (!isSpeedRequirementFulfilled())
+		if (inactiveTick > 0){
+			inactiveTick--;
 			return true;
-		if (getSpeed() == 0)
+		}
+		if (!isSpeedRequirementFulfilled()){
+			inactiveTick = 8;
 			return true;
-		if (isRunning())
+		}
+		if (getSpeed() == 0){
+			inactiveTick = 8;
 			return true;
+		}
+		if (isRunning()){
+			inactiveTick = 8;
+			return true;
+		}
 		if (level == null || level.isClientSide)
 			return true;
 		if (!getBasin().filter(BasinTileEntity::canContinueProcessing)
-			.isPresent())
+			.isPresent()){
+			inactiveTick = 8;
 			return true;
-
+		}
+		if (getBasin().isEmpty() || getBasin().get().outputTank.isFull()){
+			inactiveTick = 8;
+			return true;
+		}
 		List<Recipe<?>> recipes = getMatchingRecipes();
-		if (recipes.isEmpty())
+		if (recipes.isEmpty()){
+			inactiveTick = 8;
 			return true;
+		}
+
 		currentRecipe = recipes.get(0);
+		if (currentRecipe != null){
+			previousValidRecipe = currentRecipe;
+		}
 		startProcessingBasin();
 		sendData();
 		return true;
@@ -121,6 +145,9 @@ public abstract class BasinOperatingTileEntity extends KineticTileEntity {
 	}
 
 	protected List<Recipe<?>> getMatchingRecipes() {
+		if (previousValidRecipe != null && this.matchBasinRecipe(previousValidRecipe)){
+			return Collections.singletonList(previousValidRecipe);
+		}
 		List<Recipe<?>> list = RecipeFinder.get(getRecipeCacheKey(), level, this::matchStaticFilters);
 		return list.stream()
 			.filter(this::matchBasinRecipe)
