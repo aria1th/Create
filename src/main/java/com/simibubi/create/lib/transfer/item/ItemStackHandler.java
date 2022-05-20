@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.simibubi.create.lib.util.NBTSerializable;
 
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -71,7 +72,7 @@ public class ItemStackHandler implements IItemHandlerModifiable, NBTSerializable
 	public ItemStack extractItem(int slot, int amount, boolean sim) {
 		if (amount <= 0) return ItemStack.EMPTY;
 
-		ItemStack oldStack = getStackInSlot(slot);
+		ItemStack oldStack = sim ? getStackInSlot(slot).copy() : getStackInSlot(slot);
 		if (oldStack.isEmpty()) return ItemStack.EMPTY;
 
 		int toExtract = Math.min(amount, oldStack.getMaxStackSize());

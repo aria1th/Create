@@ -100,6 +100,7 @@ public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		inputInventory.whenContentsChanged($ -> contentsChanged = true);
 		outputInventory = new BasinInventory(9, this).forbidInsertion()
 			.withMaxStackSize(64);
+		outputInventory.whenContentsChanged($-> contentsChanged = true);
 		areFluidsMoving = false;
 		itemCapability = LazyOptional.of(() -> new CombinedInvWrapper(inputInventory, outputInventory));
 		contentsChanged = true;

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -39,20 +41,25 @@ public class StorageItemHandler implements Storage<ItemVariant> {
 	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 		ItemStack toInsert = resource.toStack((int) maxAmount);
 		ItemStack remainder = ItemHandlerHelper.insertItemStacked(handler, toInsert, true);
+		int inserted = toInsert.getCount() - remainder.getCount();
+		if (inserted < 0){
+			throw new IllegalArgumentException("Inserted amount must not be negative!");
+		}
 		transaction.addOuterCloseCallback(result -> {
-			if (result.wasCommitted()) {
+			if (result.wasCommitted() && inserted > 0) {
 				ItemHandlerHelper.insertItemStacked(handler, toInsert, false);
 			}
 		});
-		return Math.max(0,maxAmount - remainder.getCount());
+		return inserted;
 	}
 
 	@Override
 	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 		ItemStack toExtract = resource.toStack((int) maxAmount);
 		ItemStack extracted = ItemHandlerHelper.extract(handler, toExtract, true);
-		transaction.addCloseCallback((transaction1, result) -> {
-			if (result.wasCommitted()) {
+		int extractedCount = extracted.getCount();
+		transaction.addOuterCloseCallback(result -> {
+			if (result.wasCommitted() && extractedCount > 0) {
 				ItemHandlerHelper.extract(handler, toExtract, false);
 			}
 		});
@@ -100,11 +107,12 @@ public class StorageItemHandler implements Storage<ItemVariant> {
 			ItemStack extracted = owner.extractItem(slotIndex, (int) maxAmount, true);
 			if (extracted.is(resource.getItem())) {
 				actual = extracted.getCount();
-				transaction.addCloseCallback(((transaction1, result) -> {
-					if (result.wasCommitted()) {
-						owner.extractItem(slotIndex, (int) maxAmount, false);
+				long finalActual = actual;
+				transaction.addCloseCallback((transaction1, result) -> {
+					if (result.wasCommitted() && finalActual > 0) {
+						owner.extractItem(slotIndex, (int) finalActual, false);
 					}
-				}));
+				});
 			}
 			return actual;
 		}
@@ -116,7 +124,7 @@ public class StorageItemHandler implements Storage<ItemVariant> {
 
 		@Override
 		public ItemVariant getResource() {
-			return ItemVariant.of(owner.getStackInSlot(slotIndex));
+			return ItemVariant.of(owner.getStackInSlot(slotIndex).copy());
 		}
 
 		@Override

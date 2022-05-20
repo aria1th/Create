@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.impl.transfer.item.InventoryStorageImpl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
@@ -46,15 +47,29 @@ public class ItemStorageHandler implements IItemHandlerModifiable {
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		try {
-			if (storage.getVersion() == version && cachedStack.containsKey(slot)) {
-				return cachedStack.get(slot);
-			} else {
-				if (storage.getVersion() != version) {
-					version = storage.getVersion();
-					cachedStack.clear();
+		if (storage.getVersion() == version && cachedStack.containsKey(slot)) {
+			return cachedStack.get(slot);
+		}
+		else {
+			if (storage.getVersion() != version) {
+				version = storage.getVersion();
+				cachedStack.clear();
+			}
+			ItemStack targetStack = ItemStack.EMPTY;
+			if (Transaction.isOpen()){
+				TransactionContext context = Transaction.getCurrentUnsafe();
+				int index = 0;
+				for (StorageView<ItemVariant> view : storage.iterable(context)) {
+					if (index == slot){
+						targetStack = view.getResource().toStack((int) view.getAmount());
+						break;
+					}
+					index++;
 				}
-				ItemStack targetStack = ItemStack.EMPTY;
+				cachedStack.put(slot, targetStack);
+				return targetStack;
+			}
+			else {
 				try (Transaction t = Transaction.openOuter()) {
 					int index = 0;
 					for (StorageView<ItemVariant> view : storage.iterable(t)) {
@@ -64,14 +79,14 @@ public class ItemStorageHandler implements IItemHandlerModifiable {
 						}
 						index++;
 					}
-					t.abort();
 				}
-				cachedStack.put(slot, targetStack);
-				return targetStack;
+				catch (Exception e){
+					return ItemStack.EMPTY;
+				}
 			}
-		}
-		catch (Exception e){
-			return ItemStack.EMPTY;
+
+			cachedStack.put(slot, targetStack);
+			return targetStack;
 		}
 	}
 
@@ -80,14 +95,15 @@ public class ItemStorageHandler implements IItemHandlerModifiable {
 		if(stack.isEmpty())
 			return stack;
 		try (Transaction t = Transaction.openOuter()){
-			long inserted = this.storage.insert(ItemVariant.of(stack), stack.getCount(), t);
+			long inserted;
+			ItemStack remainder = stack.copy();
 			if (sim)
-				t.abort();
-			else{
+				inserted = this.storage.simulateInsert(ItemVariant.of(remainder), stack.getCount(), t);
+			else {
+				inserted = this.storage.insert(ItemVariant.of(remainder), stack.getCount(), t);
 				t.commit();
 			}
-			ItemStack remainder = stack.copy();
-			remainder.setCount((int) (stack.getCount() - inserted));
+			remainder.shrink((int) inserted);
 			return remainder;
 		}
 	}
@@ -110,6 +126,9 @@ public class ItemStorageHandler implements IItemHandlerModifiable {
 			}
 			if (!sim) {
 				t.commit();
+			}
+			else {
+				t.abort();
 			}
 		}
 		return finalVal;

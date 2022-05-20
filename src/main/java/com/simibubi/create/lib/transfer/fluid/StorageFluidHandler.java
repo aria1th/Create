@@ -35,7 +35,7 @@ public class StorageFluidHandler implements Storage<FluidVariant> {
 	@Override
 	public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction) {
 		long remainder = handler.fill(new FluidStack(resource, maxAmount), true);
-		transaction.addCloseCallback((transaction1, result) -> {
+		transaction.addOuterCloseCallback(result -> {
 			if (result.wasCommitted()) {
 				handler.fill(new FluidStack(resource, maxAmount), false);
 			}
@@ -46,7 +46,7 @@ public class StorageFluidHandler implements Storage<FluidVariant> {
 	@Override
 	public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction) {
 		FluidStack extracted = handler.drain(new FluidStack(resource, maxAmount), true);
-		transaction.addCloseCallback((transaction1, result) -> {
+		transaction.addOuterCloseCallback(result -> {
 			if (result.wasCommitted()) {
 				handler.drain(new FluidStack(resource, maxAmount), false);
 			}
