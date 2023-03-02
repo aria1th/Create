@@ -150,8 +150,8 @@ public class FluidDrainingBehaviour extends FluidManipulationBehaviour {
 					fluid = ((LiquidBlockAccessor) flowingFluid).port_lib$getFluid().getSource();
 				else {
 					affectedArea = BBHelper.encapsulate(affectedArea, BoundingBox.fromCorners(currentPos, currentPos));
-					if (!tileEntity.isVirtual())
-						world.setBlock(currentPos, emptied, 2 | 16);
+					//if (!tileEntity.isVirtual())
+						//world.setBlock(currentPos, emptied, 2 | 16);
 					dequeue(queue);
 					if (queue.isEmpty()) {
 						isValid = checkValid(world, rootPos);
@@ -167,7 +167,7 @@ public class FluidDrainingBehaviour extends FluidManipulationBehaviour {
 				emptied = Blocks.AIR.defaultBlockState();
 			}
 
-			if (this.fluid == null)
+			if (this.fluid == null || this.fluid == Fluids.EMPTY)
 				this.fluid = fluid;
 
 			if (!this.fluid.isSame(fluid)) {

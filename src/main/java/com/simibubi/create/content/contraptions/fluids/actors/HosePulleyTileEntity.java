@@ -35,6 +35,7 @@ public class HosePulleyTileEntity extends KineticTileEntity implements SidedStor
 	private FluidFillingBehaviour filler;
 	private HosePulleyFluidHandler handler;
 	private boolean infinite;
+	private FluidStack cachedFluid = FluidStack.EMPTY;
 
 	public HosePulleyTileEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
 		super(typeIn, pos, state);
@@ -44,14 +45,21 @@ public class HosePulleyTileEntity extends KineticTileEntity implements SidedStor
 											// the handler refills from the world when stored > BUCKET, which could result in nearly 2 buckets worth.
 											// on forge, there's no risk of negative results with stored > capacity
 											// fabric does have this issue, so we can *not* allow it.
-		internalTank = new SmartFluidTank(FluidConstants.BUCKET * 3, this::onTankContentsChanged);
+		internalTank = new SmartFluidTank(FluidConstants.BUCKET * 4, this::onTankContentsChanged);
 		handler = new HosePulleyFluidHandler(internalTank, filler, drainer,
 			() -> worldPosition.below((int) Math.ceil(offset.getValue())), () -> !this.isMoving);
 	}
 
 	@Override
 	public void sendData() {
-		infinite = filler.infinite || drainer.infinite;
+		infinite = filler.infinite || drainer.infinite || (cachedFluid != null && !cachedFluid.isEmpty());
+		if(infinite && !internalTank.isEmpty() && (cachedFluid == null || cachedFluid.isEmpty())){
+			cachedFluid = internalTank.getFluid().copy();
+			cachedFluid.setAmount(2174741824L);
+		}
+		if (infinite && !cachedFluid.isEmpty()){
+			this.internalTank.setFluid(cachedFluid.copy());
+		}
 		super.sendData();
 	}
 
@@ -123,7 +131,15 @@ public class HosePulleyTileEntity extends KineticTileEntity implements SidedStor
 		}
 		if (getSpeed() == 0)
 			isMoving = false;
-
+		if (cachedFluid == null && internalTank.getFluidAmount() > 1048576L){
+			infinite = true;
+			cachedFluid = internalTank.getFluid().copy();
+			cachedFluid.setAmount(2147483624L);
+		}
+		if (cachedFluid != null && !cachedFluid.isEmpty()){
+			infinite = true;
+			this.internalTank.setFluid(cachedFluid.copy());
+		}
 		offset.setValue(newOffset);
 		invalidateRenderBoundingBox();
 	}
@@ -155,6 +171,7 @@ public class HosePulleyTileEntity extends KineticTileEntity implements SidedStor
 			offset.forceNextSync();
 		compound.put("Offset", offset.writeNBT());
 		compound.put("Tank", internalTank.writeToNBT(new CompoundTag()));
+		if (infinite) compound.put("cachedFluid", cachedFluid.writeToNBT(new CompoundTag()));
 		super.write(compound, clientPacket);
 		if (clientPacket)
 			compound.putBoolean("Infinite", infinite);
@@ -164,9 +181,16 @@ public class HosePulleyTileEntity extends KineticTileEntity implements SidedStor
 	protected void read(CompoundTag compound, boolean clientPacket) {
 		offset.readNBT(compound.getCompound("Offset"), clientPacket);
 		internalTank.readFromNBT(compound.getCompound("Tank"));
+		internalTank.setCapacity((Long) (FluidConstants.BUCKET * 4));
+		infinite = compound.getBoolean("Infinite");
+		cachedFluid = compound.contains("cachedFluid") ?  FluidStack.loadFluidStackFromNBT(compound.getCompound("cachedFluid")) : FluidStack.EMPTY;
+		if (!cachedFluid.isEmpty()) infinite = true;
+		if(internalTank.getFluidAmount() > 1048576L || (infinite && (cachedFluid == null || cachedFluid.isEmpty())) && !internalTank.isEmpty() ){
+			infinite = true;
+			cachedFluid = internalTank.getFluid().copy();
+			cachedFluid.setAmount(2147483624L);
+		}
 		super.read(compound, clientPacket);
-		if (clientPacket)
-			infinite = compound.getBoolean("Infinite");
 	}
 
 	@Override
